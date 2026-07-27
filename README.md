@@ -72,6 +72,12 @@ Full citations with additional context are available in the collapsible sources 
 
 ---
 
+## Built With AI, Verified By Humans
+
+This tool was written with AI assistance (Anthropic Claude) and reviewed, tested, and validated by a human throughout every iteration. While AI was used to accelerate development — generating code, structuring data models, and drafting content — every data point, threshold, and safety guideline in this tool traces back to published, peer-reviewed research or official U.S. government food safety standards (USDA FSIS, FDA Food Code). No values were fabricated, estimated from training data, or assumed. The thermal death kinetics (D-values, z-values), freeze destruction timelines, danger zone thresholds, and storage durations were all cross-referenced against the primary sources listed above. The AI wrote the code; the science comes from the citations.
+
+---
+
 ## Disclaimer
 
 This tool is for educational and reference purposes only and does not guarantee food safety. Always use your own judgment — if food looks, smells, or feels off, discard it regardless of what any chart says. When in doubt, throw it out. See the full disclaimer within the tool for details.
