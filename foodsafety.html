@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thermal Inactivation of Foodborne Pathogens</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  :root{
+    --bg:#0B0D14;--surface:#13151F;--border:#1E2030;--border-hover:#2A2C38;
+    --text:#E8E8EC;--text2:#8B8D98;--text3:#6B6D78;
+    --toggle-bg:#13151F;--toggle-active-bg:#1E2030;--toggle-active-text:#E8E8EC;
+    --tooltip-bg:rgba(11,13,20,0.95);--banner-bg:rgba(230,57,70,0.08);
+    --note-bg:rgba(59,130,246,0.05);
+  }
+  .light{
+    --bg:#F4F5F7;--surface:#FFFFFF;--border:#D8DAE0;--border-hover:#C0C2CA;
+    --text:#1A1B2E;--text2:#5A5C68;--text3:#7A7C88;
+    --toggle-bg:#EAEBEF;--toggle-active-bg:#1A1B2E;--toggle-active-text:#FFFFFF;
+    --tooltip-bg:rgba(255,255,255,0.96);--banner-bg:rgba(230,57,70,0.06);
+    --note-bg:rgba(59,130,246,0.06);
+  }
+
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:32px 24px;transition:background 0.3s,color 0.3s}
+  .container{max-width:920px;margin:0 auto}
+  .header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:6px}
+  h1{font-size:26px;font-weight:800;letter-spacing:-0.03em;color:var(--text)}
+  .subtitle{font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:20px;max-width:720px}
+
+  /* Controls row */
+  .controls{display:flex;gap:6px;flex-shrink:0;align-items:center}
+  .pill{display:flex;background:var(--toggle-bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;height:34px}
+  .pill button{background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:13px;font-weight:700;padding:0 14px;cursor:pointer;transition:all 0.2s}
+  .pill button.active{background:var(--toggle-active-bg);color:var(--toggle-active-text)}
+  .pill button:hover:not(.active){color:var(--text2)}
+  .theme-btn{background:var(--toggle-bg);border:1px solid var(--border);border-radius:8px;height:34px;width:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .theme-btn:hover{border-color:var(--border-hover)}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;margin-bottom:16px}
+  .tabs button{background:transparent;border:1px solid var(--border);border-radius:8px 8px 0 0;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;padding:10px 20px;cursor:pointer;transition:all 0.2s;border-bottom:none}
+  .tabs button.active{background:var(--surface);color:var(--text);border-color:var(--border)}
+  .tabs button:hover:not(.active){color:var(--text2)}
+  .tab-icon{margin-right:6px;font-size:14px}
+
+  /* Chart */
+  .chart-container{background:var(--surface);border:1px solid var(--border);border-radius:0 14px 14px 14px;padding:20px 16px 16px;position:relative;margin-bottom:16px;transition:background 0.3s}
+  .chart-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:8px;padding-left:4px;display:flex;align-items:center;gap:8px}
+  .mode-tag{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:600;letter-spacing:0.05em}
+  .mode-tag.overview{background:rgba(59,130,246,0.15);color:#3B82F6}
+  .mode-tag.detail{background:rgba(42,157,143,0.15);color:#2A9D8F}
+  .back-hint{font-size:11px;color:#2A9D8F;opacity:0.8;cursor:pointer;margin-left:auto;font-weight:600}
+  .back-hint:hover{opacity:1}
+  svg{display:block;width:100%;cursor:crosshair}
+
+  /* Tooltip */
+  .tooltip{position:absolute;top:50px;right:20px;background:var(--tooltip-bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:12px;min-width:240px;pointer-events:none;backdrop-filter:blur(12px);opacity:0;transition:opacity 0.15s;z-index:10}
+  .tooltip.visible{opacity:1}
+  .tooltip .temp-label{font-weight:800;font-size:16px;margin-bottom:8px;color:var(--text)}
+  .tooltip .row{display:flex;justify-content:space-between;align-items:center;padding:2.5px 0;gap:10px}
+  .tooltip .row .name{display:flex;align-items:center;gap:6px;color:var(--text2);font-size:11px}
+  .tooltip .row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .tooltip .row .value{font-weight:700;font-variant-numeric:tabular-nums;font-size:12px}
+
+  /* Legend */
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .legend button{background:transparent;border:1px solid var(--border);border-radius:7px;padding:5px 11px;font-size:11px;font-family:inherit;cursor:pointer;font-weight:500;transition:all 0.15s;color:var(--text3);display:flex;align-items:center;gap:6px}
+  .legend button .ldot{width:7px;height:7px;border-radius:50%;opacity:0.3;transition:opacity 0.15s}
+  .legend button.active{opacity:1}
+  .legend button.active .ldot{opacity:1}
+  .legend button:not(.active){opacity:0.45}
+  .legend button.toggle-all{font-weight:700;color:var(--text)}
+
+  .info-banner{background:var(--banner-bg);border:1px solid rgba(230,57,70,0.2);border-radius:8px;padding:16px 20px;margin-bottom:12px;font-size:15px;color:var(--text);line-height:1.7}
+  .info-banner strong{color:#E63946;font-size:16px}
+
+  .zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px}
+  .zone-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:background 0.3s}
+  .zone-card .zt{font-size:13px;font-weight:700}
+  .zone-card .zl{font-size:12px;font-weight:600;margin:2px 0}
+  .zone-card .zd{font-size:11px;color:var(--text3);line-height:1.4}
+
+  .sources-section{margin-top:24px}
+  .sources-toggle{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-family:inherit;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s}
+  .sources-toggle:hover{border-color:var(--border-hover)}
+  .sources-toggle .arrow{transition:transform 0.3s;font-size:16px;color:var(--text3)}
+  .sources-toggle.open .arrow{transform:rotate(180deg)}
+  .sources-toggle.open{border-radius:10px 10px 0 0}
+  .sources-body{display:none;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:16px 20px;transition:background 0.3s}
+  .sources-body.open{display:block}
+  .source-group{margin-bottom:16px}
+  .source-group:last-child{margin-bottom:0}
+  .source-group h3{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+  .source-item{font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:6px;padding-left:12px;border-left:2px solid var(--border)}
+  .source-item a{color:#3B82F6;text-decoration:none}
+  .source-item a:hover{text-decoration:underline}
+  .source-note{font-size:11px;color:var(--text3);font-style:italic;margin-top:12px;line-height:1.5;padding:10px 14px;background:var(--note-bg);border-radius:6px}
+  .footnote{font-size:13px;color:var(--text2);margin-top:16px;line-height:1.7;opacity:1}
+
+  /* Disclaimer */
+  .disclaimer{margin-top:20px;padding:16px 20px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;font-size:13px;color:var(--text2);line-height:1.7}
+  .disclaimer strong{color:#F59E0B;font-size:13px}
+  .disclaimer .disc-title{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:14px;font-weight:700;color:#F59E0B}
+
+  /* Splash modal */
+  .splash-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)}
+  .splash-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-width:560px;width:100%;padding:28px 28px 22px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+  .splash-box .disc-title{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:16px;font-weight:800;color:#F59E0B}
+  .splash-box p{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+  .splash-box p strong{color:#F59E0B}
+  .splash-box .splash-accept{width:100%;padding:12px;background:#F59E0B;color:#000;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.2s}
+  .splash-box .splash-accept:hover{background:#D97706}
+
+  /* Gauge controls */
+  .gauge-slider-wrap{padding:4px 60px 6px;text-align:center}
+  .gauge-slider-wrap label{font-size:15px;color:var(--text2);font-weight:600;display:block;margin-bottom:8px}
+  .gauge-slider-wrap label strong{font-size:17px;font-weight:800;color:var(--text)}
+  .gauge-slider{-webkit-appearance:none;width:100%;height:8px;border-radius:4px;background:var(--border);outline:none;cursor:pointer}
+  .gauge-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--text);cursor:pointer;border:3px solid var(--surface)}
+  .gauge-slider::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--text);cursor:pointer;border:3px solid var(--surface)}
+  .gauge-hour-marks{display:flex;justify-content:space-between;padding:0 60px;margin-top:4px}
+  .gauge-hour-marks span{font-size:13px;color:var(--text3);font-weight:600}
+  .temp-select{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:8px 16px 12px}
+  .temp-select button{background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:12px;font-family:inherit;cursor:pointer;font-weight:600;transition:all 0.15s;color:var(--text3)}
+  /* Cool tones: 40-60°F */
+  .temp-select button.cool{background:#2563EB;color:#fff;border-color:#2563EB}
+  .temp-select button.cool-off{border-color:#2563EB80;color:#60A5FA}
+  /* Neutral: 70°F */
+  .temp-select button.neutral{background:#6B7280;color:#fff;border-color:#6B7280}
+  .temp-select button.neutral-off{border-color:#6B728060;color:#9CA3AF}
+  /* Warm tones: 80-140°F */
+  .temp-select button.warm-low{background:#F59E0B;color:#fff;border-color:#F59E0B}
+  .temp-select button.warm-low-off{border-color:#F59E0B60;color:#FBBF24}
+  .temp-select button.warm-mid{background:#EF4444;color:#fff;border-color:#EF4444}
+  .temp-select button.warm-mid-off{border-color:#EF444460;color:#F87171}
+  .temp-select button.warm-high{background:#DC2626;color:#fff;border-color:#DC2626}
+  .temp-select button.warm-high-off{border-color:#DC262660;color:#EF4444}
+  /* Safe temps selected = green */
+  .temp-select button.safe-selected{background:#22C55E;color:#fff;border-color:#22C55E;box-shadow:0 0 12px rgba(34,197,94,0.3)}
+
+  /* Leftover storage lookup */
+  .lookup-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .lookup-tabs button{background:transparent;border:1px solid var(--border);border-radius:8px;padding:8px 13px;font-family:inherit;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;transition:all 0.15s}
+  .lookup-tabs button.active{background:#E63946;color:#fff;border-color:#E63946}
+  .lookup-tabs button:hover:not(.active){color:var(--text2);border-color:var(--border-hover)}
+  .lookup-cat-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-top:10px;margin-bottom:6px;padding-left:2px}
+  .lookup-cat-label:first-child{margin-top:0}
+  .lookup-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:background 0.3s}
+  .lookup-card .food-name{font-size:20px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .lookup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+  .lookup-item{padding:14px;border-radius:10px;text-align:center}
+  .lookup-item .li-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+  .lookup-item .li-value{font-size:20px;font-weight:800}
+  .lookup-item .li-unit{font-size:11px;color:var(--text2);margin-top:2px}
+  .lookup-reheat{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:var(--bg);border-radius:8px;line-height:1.5}
+  .lookup-reheat strong{color:#F59E0B}
+  .batch-tip{margin-top:14px}
+  .batch-toggle{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:inherit;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s}
+  .batch-toggle:hover{border-color:var(--border-hover)}
+  .batch-toggle .arrow{transition:transform 0.3s;color:var(--text3)}
+  .batch-toggle.open .arrow{transform:rotate(180deg)}
+  .batch-toggle.open{border-radius:8px 8px 0 0}
+  .batch-body{display:none;background:var(--bg);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.6}
+  .batch-body.open{display:block}
+  .batch-body strong{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Foodborne Pathogen Safety</h1>
+    <div class="controls">
+      <div class="pill" id="unitToggle">
+        <button class="active" onclick="setUnit('F')">°F</button>
+        <button onclick="setUnit('C')">°C</button>
+      </div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+    </div>
+  </div>
+  <p class="subtitle" id="subtitle"></p>
+
+  <div class="tabs" id="tabBar">
+    <button class="active" onclick="setTab('heat')"><span class="tab-icon">🔥</span>Heat Inactivation</button>
+    <button onclick="setTab('freeze')"><span class="tab-icon">❄️</span>Freeze Inactivation</button>
+    <button onclick="setTab('danger')"><span class="tab-icon">⏱️</span>Holding / Danger Zone</button>
+    <button onclick="setTab('cooling')"><span class="tab-icon">🌡️</span>Cooling & Reheating</button>
+  </div>
+
+  <div class="chart-container" id="chartContainer">
+    <div class="chart-label" id="chartLabel"></div>
+    <div id="dangerTempSelect" style="display:none"></div>
+    <svg id="chart" viewBox="0 0 780 460"></svg>
+    <div id="dangerTimeSlider" style="display:none"></div>
+    <div class="tooltip" id="tooltip">
+      <div class="temp-label" id="tooltipTemp"></div>
+      <div id="tooltipRows"></div>
+    </div>
+  </div>
+
+  <div id="infoBanner"></div>
+  <div id="coolingContent" style="display:none"></div>
+  <div class="legend" id="legend"></div>
+  <div class="zones" id="zones"></div>
+  <p class="footnote" id="footnote"></p>
+
+  <div class="disclaimer" id="disclaimer" style="display:none">
+    <div class="disc-title">⚠️ Important Safety Disclaimer</div>
+    This tool is for <strong>educational and reference purposes only</strong> and does not guarantee food safety. Time-and-temperature guidelines are based on FDA and USDA general recommendations, but actual bacterial growth depends on many factors including the specific food, how it was prepared, initial contamination levels, moisture, pH, and environmental conditions. <strong>Always use your own judgment</strong> — if food looks, smells, or feels off in any way, discard it regardless of what this chart indicates. When in doubt, throw it out. This tool is not a substitute for professional food safety training, certified food handler guidelines, or medical advice. The creators of this tool assume no liability for foodborne illness or any decisions made based on this information.
+  </div>
+
+  <!-- Splash modal -->
+  <div class="splash-overlay" id="splashOverlay" style="display:none">
+    <div class="splash-box">
+      <div class="disc-title">⚠️ Important Safety Disclaimer</div>
+      <p>This tool is for <strong>educational and reference purposes only</strong> and does not guarantee food safety. Time-and-temperature guidelines are based on FDA and USDA general recommendations, but actual bacterial growth depends on many factors including the specific food, how it was prepared, initial contamination levels, moisture, pH, and environmental conditions.</p>
+      <p><strong>Always use your own judgment</strong> — if food looks, smells, or feels off in any way, discard it regardless of what this chart indicates. When in doubt, throw it out. This tool is not a substitute for professional food safety training, certified food handler guidelines, or medical advice. The creators of this tool assume no liability for foodborne illness or any decisions made based on this information.</p>
+      <button class="splash-accept" onclick="dismissSplash()">I Understand — Show the Gauge</button>
+    </div>
+  </div>
+
+  <div class="sources-section">
+    <button class="sources-toggle" id="srcToggle" onclick="toggleSources()">
+      <span>📚 Data Sources & Methodology</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="sources-body" id="srcBody">
+      <div class="source-group">
+        <h3>Thermal Inactivation (Heat) — Primary Sources</h3>
+        <div class="source-item">USDA FSIS. <strong>Appendix A: Compliance Guidelines for Meeting Lethality Performance Standards for Certain Meat and Poultry Products.</strong> Time-temperature tables for 6.5–7 log reduction of Salmonella in cooked meat products.</div>
+        <div class="source-item">Murphy, R.Y. et al. (2002). <strong>"Thermal Inactivation D- and z-Values of Salmonella Serotypes and Listeria innocua in Chicken Patties, Chicken Tenders, Franks, Beef Patties, and Blended Beef and Turkey Patties."</strong> <em>Journal of Food Protection</em>, 65(8), 1260–1266.</div>
+        <div class="source-item">McMinn, R.P. et al. (2018). <strong>"Processed Meat Thermal Processing Food Safety — Generating D-Values for Salmonella, Listeria monocytogenes, and Escherichia coli."</strong> Validated FSIS Appendix A guidelines across roast beef, turkey, and ham products.</div>
+        <div class="source-item">Sánchez-Recillas, A. et al. (2022). <strong>"Thermal Inactivation of Salmonella enterica and Listeria monocytogenes in Quesillo Manufactured from Raw Milk."</strong> <em>Journal of Food Protection</em>.</div>
+        <div class="source-item">FDA. <strong>Food Code 2022.</strong> Chapter 3-401: Cooking — minimum internal cooking temperatures for various food categories.</div>
+        <div class="source-item">ICMSF. <strong>Microorganisms in Foods 5: Characteristics of Microbial Pathogens.</strong> Comprehensive reference for D-values and z-values across foodborne pathogens.</div>
+      </div>
+      <div class="source-group">
+        <h3>Freeze Inactivation — Primary Sources</h3>
+        <div class="source-item">USDA FSIS. <strong>9 CFR 318.10 — Prescribed Treatment of Pork to Destroy Trichinae.</strong> Freezing: 5°F/20 days, −10°F/10 days, or −20°F/6 days for pork ≤6 inches thick.</div>
+        <div class="source-item">FDA. <strong>Fish and Fishery Products Hazards and Controls Guidance (4th Edition).</strong> Chapter 5: Parasites.</div>
+        <div class="source-item">FDA Food Code 2017/2022. <strong>Section 3-402.11: Parasite Destruction.</strong> Three approved methods: −4°F/168 hrs; −31°F until solid then 15 hrs; or −31°F until solid then 24 hrs at −4°F.</div>
+        <div class="source-item">National Center for Home Food Preservation (NCHFP/UGA). <strong>"Curing and Smoking Meats — Literature Review."</strong></div>
+        <div class="source-item">Dubey, J.P. (2004). <strong>"Toxoplasmosis — a waterborne zoonosis."</strong> <em>Veterinary Parasitology</em>, 126(1-2), 57–72.</div>
+        <div class="source-item">Kotula, A.W. et al. (1991). <strong>"Effect of Freezing on Infectivity of Toxoplasma gondii Tissue Cysts in Pork."</strong> <em>Journal of Food Protection</em>, 54(9), 687–690.</div>
+      </div>
+      <div class="source-group">
+        <h3>Holding Time / Danger Zone — Primary Sources</h3>
+        <div class="source-item">FDA. <strong>Food Code 2022, Section 3-501.16: Time as a Public Health Control.</strong> Establishes the 4-hour maximum for food held in the temperature danger zone (41–135°F / 5–57°C) without temperature control, after which food must be discarded.</div>
+        <div class="source-item">FDA. <strong>Food Code 2022, Section 3-501.19: Time/Temperature Control for Safety Food — Ready-to-Eat.</strong> Defines cumulative time limits and requirements for date-marking and disposition of TCS foods.</div>
+        <div class="source-item">USDA FSIS. <strong>"Danger Zone" (40°F–140°F) Fact Sheet.</strong> General consumer guidance on the 2-hour rule (1 hour above 90°F) for perishable food left at room temperature.</div>
+        <div class="source-item">FDA. <strong>Food Code 2022, Chapter 3-4: Destruction of Organisms of Public Health Concern — Time/Temperature Parameters.</strong> Specifies minimum holding temperatures for hot (135°F / 57°C) and cold (41°F / 5°C) holding of TCS foods during service.</div>
+        <div class="source-item">Schaffner, D.W. & Schaffner, K.M. (2007). <strong>"Management of Risk of Microbial Cross-Contamination from Uncooked Beef to Cooked Beef by Use of an Exponential Growth Model."</strong> <em>Journal of Food Protection</em>, 70(11), 2524–2530. Growth rate modeling for common foodborne pathogens across temperature ranges.</div>
+        <div class="source-item">Ratkowsky, D.A. et al. (1982). <strong>"Relationship Between Temperature and Growth Rate of Bacterial Cultures."</strong> <em>Journal of Bacteriology</em>, 149(1), 1–5. Foundational model for temperature-dependent bacterial growth rates used in predictive food microbiology.</div>
+        <div class="source-item">USDA Agricultural Research Service. <strong>Pathogen Modeling Program (PMP) & ComBase.</strong> Predictive models for growth, survival, and inactivation of foodborne pathogens as a function of temperature, pH, and water activity.</div>
+      </div>
+      <div class="source-group">
+        <h3>Cooling & Reheating — Primary Sources</h3>
+        <div class="source-item">FDA. <strong>Food Code 2022, Section 3-501.14: Cooling.</strong> Two-stage cooling requirement: 135°F to 70°F within 2 hours, then 70°F to 41°F within an additional 4 hours (6 hours total).</div>
+        <div class="source-item">FDA. <strong>Food Code 2022, Section 3-501.15: Cooling Methods.</strong> Approved methods include shallow pans, ice baths, ice paddles, blast chillers, and adding ice as an ingredient.</div>
+        <div class="source-item">FDA. <strong>Food Code 2022, Section 3-403.11: Reheating for Hot Holding.</strong> Previously cooked and cooled TCS food must be reheated to 165°F for 15 seconds within 2 hours before being placed in hot holding.</div>
+        <div class="source-item">USDA FSIS. <strong>"Leftovers and Food Safety" Fact Sheet.</strong> Consumer guidance on cooling, storing, and reheating leftovers safely.</div>
+      </div>
+      <div class="source-group">
+        <h3>General References</h3>
+        <div class="source-item">Jay, J.M., Loessner, M.J., & Golden, D.A. <strong>Modern Food Microbiology (7th Edition).</strong> Springer.</div>
+        <div class="source-item">Adams, M.R. & Moss, M.O. <strong>Food Microbiology (4th Edition).</strong> Royal Society of Chemistry.</div>
+      </div>
+      <div class="source-note">
+        <strong>Methodology note:</strong> Curves modeled using first-order thermal death kinetics: log₁₀(t) = log₁₀(D<sub>ref</sub>) − (T − T<sub>ref</sub>) / z. Parameters approximated from sources above for 6.5–7 log reductions. Actual times vary by food matrix, moisture, fat, pH, and strain. For educational purposes — always follow USDA/FDA guidelines.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const HEAT_PATHOGENS = [
+  {id:"listeria",name:"Listeria monocytogenes",refTime:62,z:10.2,color:"#E63946"},
+  {id:"salmonella",name:"Salmonella spp.",refTime:36,z:10.8,color:"#F4A261"},
+  {id:"ecoli",name:"E. coli O157:H7",refTime:18,z:10.5,color:"#2A9D8F"},
+  {id:"cyclospora",name:"Cyclospora & Protozoan Parasites",refTime:48,z:15.5,color:"#5A7FC4"},
+  {id:"norovirus",name:"Norovirus (human)",refTime:32,z:14.0,color:"#7B68AE"},
+  {id:"campylobacter",name:"Campylobacter jejuni",refTime:12,z:9.5,color:"#B07CC6"},
+  {id:"hepatitisA",name:"Hepatitis A virus",refTime:10,z:12.5,color:"#45B7AA"},
+  {id:"clostridium",name:"C. perfringens (vegetative)",refTime:14,z:12.0,color:"#8DB255"},
+  {id:"toxoplasma",name:"Toxoplasma gondii cysts",refTime:6,z:10.0,color:"#3D7A44"},
+  {id:"vibrio",name:"Vibrio vulnificus",refTime:8,z:8.5,color:"#E8A838"},
+];
+const FREEZE_PATHOGENS = [
+  {id:"anisakis",name:"Anisakis simplex (fish parasite)",refTime:1450,z:25.7,color:"#5A7FC4"},
+  {id:"trichinella",name:"Trichinella spiralis (pork)",refTime:990,z:47.8,color:"#F4A261"},
+  {id:"toxoplasma_f",name:"Toxoplasma gondii (tissue cysts)",refTime:760,z:16.7,color:"#3D7A44"},
+  {id:"taenia",name:"Taenia spp. (tapeworm)",refTime:358,z:34.4,color:"#E63946"},
+  {id:"cyclospora_f",name:"Cyclospora cayetanensis",refTime:340,z:38.0,color:"#7B68AE"},
+  {id:"giardia",name:"Giardia lamblia (cysts)",refTime:104,z:37.7,color:"#2A9D8F"},
+];
+
+// Danger zone: threshold lookup [safeHours, discardHours] by temperature
+const DANGER_THRESHOLDS = [
+  [40,999,999],[45,8,14],[50,6,10],[55,4,8],[60,3,6],[65,2.5,5],
+  [70,2,4],[75,2,4],[80,1.5,3],[85,1,2.5],[90,1,2],[95,1,2],[100,1,2],
+  [105,1.5,3],[110,2,4],[115,3,5.5],[120,4,7],[125,5.5,9],[130,7,11],[135,8,14],[140,999,999]
+];
+const DANGER_TEMP_OPTIONS = [40,50,60,70,75,80,90,100,110,120,130,140];
+
+function getThresholds(temp) {
+  if (temp<=40) return [999,999];
+  if (temp>=140) return [999,999];
+  for (let i=0;i<DANGER_THRESHOLDS.length-1;i++) {
+    const [t1,s1,d1]=DANGER_THRESHOLDS[i],[t2,s2,d2]=DANGER_THRESHOLDS[i+1];
+    if (temp>=t1&&temp<=t2) {
+      const f=(temp-t1)/(t2-t1);
+      return [s1+(s2-s1)*f, d1+(d2-d1)*f];
+    }
+  }
+  return [2,4];
+}
+
+// ─── STATE ───
+let unit="F", tab="heat", heatMode="overview", theme="dark";
+let heatActive=new Set(HEAT_PATHOGENS.map(p=>p.id));
+let freezeActive=new Set(FREEZE_PATHOGENS.map(p=>p.id));
+let dangerTemp=75, dangerTime=0;
+let hoverTemp=null;
+
+// ─── THEME ───
+function getTheme() {
+  return {
+    grid: theme==="dark"?"#1E2030":"#D8DAE0",
+    axisText: theme==="dark"?"#6B6D78":"#7A7C88",
+    surfaceStroke: theme==="dark"?"#13151F":"#FFFFFF",
+    hoverLine: theme==="dark"?"#E8E8EC":"#1A1B2E",
+  };
+}
+
+// ─── HELPERS ───
+const fToC=f=>(f-32)*5/9;
+const dispTemp=f=>unit==="C"?fToC(f).toFixed(1)+"°C":Math.round(f)+"°F";
+const dispTempShort=f=>unit==="C"?Math.round(fToC(f))+"°":Math.round(f)+"°";
+const heatCalc=(ref,z,t)=>ref*Math.pow(10,-(t-135)/z);
+const freezeCalc=(ref,z,t)=>ref*Math.pow(10,(t-20)/z);
+function fmtMin(m){if(m>=60)return(m/60).toFixed(1)+" hr";if(m>=1)return m.toFixed(1)+" min";const s=m*60;if(s>=1)return s.toFixed(1)+" sec";if(s>=0.001)return(s*1000).toFixed(1)+" ms";return"< 1 ms"}
+function fmtHrs(h){if(h>=48)return(h/24).toFixed(1)+" days";if(h>=1)return h.toFixed(1)+" hrs";const m=h*60;if(m>=1)return m.toFixed(0)+" min";return"< 1 min"}
+
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs||{}))e.setAttribute(k,v);if(parent)parent.appendChild(e);return e}
+
+const W=780,H=460,M={t:30,r:20,b:55,l:72},PW=W-M.l-M.r,PH=H-M.t-M.b;
+
+function makeXS(xMin,xMax){return t=>M.l+((t-xMin)/(xMax-xMin))*PW}
+function makeXSInv(xMin,xMax){return t=>M.l+((xMin-t)/(xMin-xMax))*PW}
+function makeYLin(yMax){return m=>M.t+PH-((Math.min(Math.max(m,0),yMax)/yMax)*PH)}
+function makeYLog(lo,hi){return m=>{const l=Math.log10(Math.max(m,Math.pow(10,lo)));const c=Math.max(lo,Math.min(l,hi));return M.t+PH-((c-lo)/(hi-lo))*PH}}
+
+// ─── DRAW ───
+function draw(){
+  updateSubtitle();
+  const svg=document.getElementById("chart");
+  if(tab!=="cooling"){svg.style.height="";svg.setAttribute("viewBox","0 0 780 460")}
+  if(tab!=="danger"&&tab!=="cooling"){
+    document.getElementById("dangerTempSelect").style.display="none";
+    document.getElementById("dangerTimeSlider").style.display="none";
+  }
+  if(tab!=="cooling") document.getElementById("coolingContent").style.display="none";
+  if(tab==="heat")drawHeat();else if(tab==="freeze")drawFreeze();else if(tab==="danger")drawDanger();else drawCooling();
+  buildLegend();buildZones();updateFootnote();updateInfoBanner();
+}
+
+function drawHeat(){
+  const svg=document.getElementById("chart");svg.innerHTML="";const T=getTheme();
+  svg.setAttribute("viewBox","0 0 780 460");
+  const isDet=heatMode==="detail";
+  const xMin=isDet?148:135,xMax=180,xS=makeXS(xMin,xMax);
+  let yS,yTA;
+  if(isDet){yS=makeYLog(Math.log10(1/60000),Math.log10(8));yTA=[{v:5,l:"5 min"},{v:2,l:"2 min"},{v:1,l:"1 min"},{v:0.5,l:"30 sec"},{v:10/60,l:"10 sec"},{v:1/60,l:"1 sec"},{v:0.1/60,l:"0.1 sec"},{v:0.01/60,l:"10 ms"},{v:0.001/60,l:"1 ms"}]}
+  else{yS=makeYLin(68);yTA=[0,10,20,30,40,50,60].map(v=>({v,l:v===60?"1 hr":v===0?"0":v+"m"}))}
+  const xTicks=isDet?[148,150,152,154,156,158,160,162,164,166,168,170,172,174,176,178,180]:[135,140,145,150,155,160,165,170,175,180];
+  const temps=[];for(let t=xMin;t<=xMax;t+=(xMax-xMin)/300)temps.push(t);
+
+  // Sous-vide
+  if(!isDet){
+    el("rect",{x:xS(135),y:M.t,width:xS(145)-xS(135),height:PH,fill:"#F4A261",opacity:0.18,rx:2},svg);
+    el("rect",{x:xS(135),y:M.t,width:xS(145)-xS(135),height:PH,fill:"none",stroke:"#F4A261","stroke-width":1.5,opacity:0.4,rx:2},svg);
+    el("text",{x:xS(140),y:M.t+16,"text-anchor":"middle",fill:"#F4A261",opacity:0.9,"font-size":10,"font-weight":700},svg).textContent="SOUS-VIDE ZONE";
+    el("text",{x:xS(140),y:M.t+28,"text-anchor":"middle",fill:"#F4A261",opacity:0.6,"font-size":8},svg).textContent=dispTemp(135)+" – "+dispTemp(145);
+  }
+  // IK zone
+  const ik1=xS(Math.max(160,xMin)),ik2=xS(Math.min(165,xMax));
+  if(ik2>ik1){
+    el("rect",{x:ik1,y:M.t,width:ik2-ik1,height:PH,fill:"#2A9D8F",opacity:isDet?0.15:0.1,rx:2},svg);
+    el("rect",{x:ik1,y:M.t,width:ik2-ik1,height:PH,fill:"none",stroke:"#2A9D8F","stroke-width":1,opacity:0.4,rx:2},svg);
+    if(!isDet){
+      el("text",{x:(ik1+ik2)/2,y:M.t+PH/2-12,"text-anchor":"middle",fill:"#2A9D8F",opacity:0.8,"font-size":10,"font-weight":700},svg).textContent="INSTANT KILL";
+      el("text",{x:(ik1+ik2)/2,y:M.t+PH/2,"text-anchor":"middle",fill:"#2A9D8F",opacity:0.5,"font-size":9},svg).textContent=dispTemp(160)+" – "+dispTemp(165);
+      el("text",{x:(ik1+ik2)/2,y:M.t+PH/2+14,"text-anchor":"middle",fill:"#2A9D8F",opacity:0.5,"font-size":8,"font-weight":600},svg).textContent="Click to zoom →";
+    } else {
+      el("text",{x:(ik1+ik2)/2,y:M.t+14,"text-anchor":"middle",fill:"#2A9D8F",opacity:0.8,"font-size":10,"font-weight":700},svg).textContent="INSTANT KILL ZONE";
+    }
+  }
+  if(isDet){const y1=yS(1/60);if(y1>M.t&&y1<M.t+PH){el("line",{x1:M.l,x2:M.l+PW,y1,y2:y1,stroke:"#E63946","stroke-width":0.8,"stroke-dasharray":"6,3",opacity:0.4},svg);el("text",{x:M.l+PW+4,y:y1+3,fill:"#E63946",opacity:0.6,"font-size":9,"font-weight":600},svg).textContent="1 sec"}}
+
+  // Grid
+  yTA.forEach(tk=>{const y=yS(tk.v);if(y<M.t-1||y>M.t+PH+1)return;el("line",{x1:M.l,x2:M.l+PW,y1:y,y2:y,stroke:T.grid,"stroke-width":0.5},svg);el("text",{x:M.l-8,y:y+4,"text-anchor":"end",fill:T.axisText,"font-size":10},svg).textContent=tk.l});
+  xTicks.forEach(t=>{const x=xS(t);el("line",{x1:x,x2:x,y1:M.t,y2:M.t+PH,stroke:T.grid,"stroke-width":0.5},svg);el("text",{x,y:M.t+PH+18,"text-anchor":"middle",fill:T.axisText,"font-size":11},svg).textContent=dispTempShort(t)});
+  el("text",{x:M.l+PW/2,y:H-4,"text-anchor":"middle",fill:T.axisText,"font-size":12,"font-weight":500},svg).textContent="Internal Temperature ("+(unit==="C"?"°C":"°F")+")";
+  const yl=el("text",{x:14,y:M.t+PH/2,"text-anchor":"middle",fill:T.axisText,"font-size":11,"font-weight":500,transform:`rotate(-90,14,${M.t+PH/2})`},svg);
+  yl.textContent=isDet?"Time to Inactivate (log scale)":"Time to Inactivate (minutes)";
+
+  // Lines
+  HEAT_PATHOGENS.forEach(p=>{
+    const pts=temps.map(t=>({x:xS(t),y:yS(heatCalc(p.refTime,p.z,t))}));
+    const isA=heatActive.has(p.id);
+    if(!isDet){let aD=pts.map((pt,i)=>`${i===0?"M":"L"}${pt.x.toFixed(2)},${pt.y.toFixed(2)}`).join(" ");aD+=` L${pts[pts.length-1].x.toFixed(2)},${yS(0)} L${pts[0].x.toFixed(2)},${yS(0)} Z`;el("path",{d:aD,fill:p.color,opacity:isA?0.05:0},svg)}
+    const d=pts.map((pt,i)=>`${i===0?"M":"L"}${pt.x.toFixed(2)},${pt.y.toFixed(2)}`).join(" ");
+    el("path",{d,fill:"none",stroke:p.color,"stroke-width":isA?2.2:0.5,opacity:isA?1:0.08,"stroke-linecap":"round","stroke-linejoin":"round"},svg);
+  });
+
+  // Overlay
+  const ov=el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"transparent",style:"cursor:crosshair"},svg);
+  ov.addEventListener("mousemove",e=>{const r=svg.getBoundingClientRect();const sx=((e.clientX-r.left)/r.width)*W;const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(!isDet&&t>=160&&t<=165)ov.style.cursor="pointer";else ov.style.cursor="crosshair";if(t>=xMin&&t<=xMax){hoverTemp=t;showTip(HEAT_PATHOGENS,heatActive,heatCalc,fmtMin,xS,yS)}else hideTip()});
+  ov.addEventListener("mouseleave",()=>{ov.style.cursor="crosshair";hideTip()});
+  ov.addEventListener("click",e=>{const r=svg.getBoundingClientRect();const sx=((e.clientX-r.left)/r.width)*W;const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(!isDet&&t>=160&&t<=165){heatMode="detail";draw()}});
+  el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"none",stroke:T.grid,"stroke-width":1,rx:2},svg);
+
+  const cl=document.getElementById("chartLabel");
+  cl.innerHTML=isDet?`<span>Detail View</span><span class="mode-tag detail">Log Scale · ${dispTemp(148)}–${dispTemp(180)}</span><span class="back-hint" onclick="heatMode='overview';draw()">← Back to full view</span>`:`<span>Exponential Decay</span><span class="mode-tag overview">Overview</span>`;
+}
+
+function drawFreeze(){
+  const svg=document.getElementById("chart");svg.innerHTML="";const T=getTheme();
+  svg.setAttribute("viewBox","0 0 780 460");
+  const xMin=20,xMax=-30;
+  const xS=t=>M.l+((xMin-t)/(xMin-xMax))*PW;
+  const yS=makeYLog(Math.log10(1),Math.log10(2000));
+  const xTicks=[20,15,10,5,0,-5,-10,-15,-20,-25,-30];
+  const yTA=[{v:1440,l:"60 days"},{v:720,l:"30 days"},{v:336,l:"14 days"},{v:168,l:"7 days"},{v:72,l:"3 days"},{v:24,l:"1 day"},{v:8,l:"8 hrs"},{v:2,l:"2 hrs"},{v:1,l:"1 hr"}];
+  const temps=[];for(let t=20;t>=-30;t-=0.25)temps.push(t);
+
+  // Zones
+  el("rect",{x:xS(20),y:M.t,width:xS(0)-xS(20),height:PH,fill:"#5A7FC4",opacity:0.08,rx:2},svg);
+  el("rect",{x:xS(20),y:M.t,width:xS(0)-xS(20),height:PH,fill:"none",stroke:"#5A7FC4","stroke-width":1,opacity:0.3,rx:2},svg);
+  el("text",{x:(xS(20)+xS(0))/2,y:M.t+16,"text-anchor":"middle",fill:"#5A7FC4",opacity:0.8,"font-size":10,"font-weight":700},svg).textContent="HOME FREEZER";
+  el("text",{x:(xS(20)+xS(0))/2,y:M.t+28,"text-anchor":"middle",fill:"#5A7FC4",opacity:0.5,"font-size":8},svg).textContent=dispTemp(20)+" → "+dispTemp(0);
+
+  el("rect",{x:xS(0),y:M.t,width:xS(-20)-xS(0),height:PH,fill:"#7B68AE",opacity:0.08,rx:2},svg);
+  el("rect",{x:xS(0),y:M.t,width:xS(-20)-xS(0),height:PH,fill:"none",stroke:"#7B68AE","stroke-width":1,opacity:0.25,rx:2},svg);
+  el("text",{x:(xS(0)+xS(-20))/2,y:M.t+16,"text-anchor":"middle",fill:"#7B68AE",opacity:0.8,"font-size":10,"font-weight":700},svg).textContent="DEEP FREEZE";
+
+  el("rect",{x:xS(-20),y:M.t,width:xS(-30)-xS(-20),height:PH,fill:"#2A9D8F",opacity:0.08,rx:2},svg);
+  el("rect",{x:xS(-20),y:M.t,width:xS(-30)-xS(-20),height:PH,fill:"none",stroke:"#2A9D8F","stroke-width":1,opacity:0.25,rx:2},svg);
+  el("text",{x:(xS(-20)+xS(-30))/2,y:M.t+16,"text-anchor":"middle",fill:"#2A9D8F",opacity:0.8,"font-size":9,"font-weight":700},svg).textContent="FLASH FREEZE";
+
+  yTA.forEach(tk=>{const y=yS(tk.v);if(y<M.t-1||y>M.t+PH+1)return;el("line",{x1:M.l,x2:M.l+PW,y1:y,y2:y,stroke:T.grid,"stroke-width":0.5},svg);el("text",{x:M.l-8,y:y+4,"text-anchor":"end",fill:T.axisText,"font-size":10},svg).textContent=tk.l});
+  xTicks.forEach(t=>{const x=xS(t);el("line",{x1:x,x2:x,y1:M.t,y2:M.t+PH,stroke:T.grid,"stroke-width":0.5},svg);el("text",{x,y:M.t+PH+18,"text-anchor":"middle",fill:T.axisText,"font-size":11},svg).textContent=dispTempShort(t)});
+  el("text",{x:M.l+PW/2,y:H-4,"text-anchor":"middle",fill:T.axisText,"font-size":12,"font-weight":500},svg).textContent="Freezer Temperature ("+(unit==="C"?"°C":"°F")+")";
+  el("text",{x:14,y:M.t+PH/2,"text-anchor":"middle",fill:T.axisText,"font-size":11,"font-weight":500,transform:`rotate(-90,14,${M.t+PH/2})`},svg).textContent="Time to Inactivate (log scale)";
+
+  FREEZE_PATHOGENS.forEach(p=>{
+    const pts=temps.map(t=>({x:xS(t),y:yS(freezeCalc(p.refTime,p.z,t))}));
+    const isA=freezeActive.has(p.id);
+    const d=pts.map((pt,i)=>`${i===0?"M":"L"}${pt.x.toFixed(2)},${pt.y.toFixed(2)}`).join(" ");
+    el("path",{d,fill:"none",stroke:p.color,"stroke-width":isA?2.2:0.5,opacity:isA?1:0.08,"stroke-linecap":"round","stroke-linejoin":"round"},svg);
+  });
+
+  const ov=el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"transparent",style:"cursor:crosshair"},svg);
+  ov.addEventListener("mousemove",e=>{const r=svg.getBoundingClientRect();const sx=((e.clientX-r.left)/r.width)*W;const t=Math.round(20-((sx-M.l)/PW)*50);if(t<=20&&t>=-30){hoverTemp=t;showTip(FREEZE_PATHOGENS,freezeActive,freezeCalc,fmtHrs,xS,yS)}else hideTip()});
+  ov.addEventListener("mouseleave",hideTip);
+  el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"none",stroke:T.grid,"stroke-width":1,rx:2},svg);
+
+  document.getElementById("chartLabel").innerHTML=`<span>Freeze Inactivation</span><span class="mode-tag" style="background:rgba(90,127,196,0.15);color:#5A7FC4">Parasites Only</span>`;
+}
+
+// ─── DANGER ZONE GAUGE ───
+function drawDanger(){
+  const svg=document.getElementById("chart");svg.innerHTML="";const T=getTheme();
+  hideTip();
+  svg.setAttribute("viewBox","0 0 780 390");
+  document.getElementById("dangerTempSelect").style.display="block";
+  document.getElementById("dangerTimeSlider").style.display="block";
+
+  const tSel=document.getElementById("dangerTempSelect");
+  tSel.innerHTML="";tSel.className="temp-select";
+  DANGER_TEMP_OPTIONS.forEach(t=>{
+    const b=document.createElement("button");
+    b.textContent=unit==="C"?Math.round(fToC(t))+"°C":t+"°F";
+    const selected=t===dangerTemp;
+    const isSafeTemp=t<=40||t>=140;
+    let cls="";
+    if(selected && isSafeTemp){
+      cls="safe-selected";
+    } else if(t<=60) cls=selected?"cool":"cool-off";
+    else if(t<=70) cls=selected?"neutral":"neutral-off";
+    else if(t<=80) cls=selected?"warm-low":"warm-low-off";
+    else if(t<=100) cls=selected?"warm-mid":"warm-mid-off";
+    else cls=selected?"warm-high":"warm-high-off";
+    b.className=cls;
+    b.addEventListener("click",()=>{dangerTemp=t;draw()});
+    tSel.appendChild(b);
+  });
+
+  const tSlider=document.getElementById("dangerTimeSlider");
+  tSlider.innerHTML=`<div class="gauge-slider-wrap"><label>Time at temperature: <strong id="timeDisplay">${dangerTime.toFixed(1)} hours</strong></label><input type="range" class="gauge-slider" id="timeRange" min="0" max="8" step="0.1" value="${dangerTime}"></div><div class="gauge-hour-marks">${[0,1,2,3,4,5,6,7,8].map(h=>`<span>${h}h</span>`).join("")}</div>`;
+  document.getElementById("timeRange").addEventListener("input",e=>{
+    dangerTime=parseFloat(e.target.value);
+    document.getElementById("timeDisplay").textContent=dangerTime.toFixed(1)+" hours";
+    drawGauge(svg,T);
+  });
+  drawGauge(svg,T);
+
+  // Make gauge arc clickable to set time
+  svg.style.cursor="pointer";
+  svg.addEventListener("click",function gaugeClick(e){
+    if(tab!=="danger") return;
+    const rect=svg.getBoundingClientRect();
+    const svgX=((e.clientX-rect.left)/rect.width)*W;
+    const svgY=((e.clientY-rect.top)/rect.height)*H;
+    const cx=W/2,cy=210;
+    const dx=svgX-cx,dy=-(svgY-cy);
+    let angle=Math.atan2(dx,dy)*180/Math.PI; // 0=top, clockwise positive
+    const HALF=125;
+    if(angle<-HALF) angle=-HALF;
+    if(angle>HALF) angle=HALF;
+    const frac=(angle+HALF)/(HALF*2);
+    const newTime=Math.round(frac*80)/10; // 0-8, step 0.1
+    dangerTime=Math.max(0,Math.min(8,newTime));
+    const slider=document.getElementById("timeRange");
+    if(slider) slider.value=dangerTime;
+    const disp=document.getElementById("timeDisplay");
+    if(disp) disp.textContent=dangerTime.toFixed(1)+" hours";
+    drawGauge(null,getTheme());
+  });
+
+  const isSafeTemp=dangerTemp<=40||dangerTemp>=140;
+  document.getElementById("chartLabel").innerHTML=isSafeTemp
+    ?`<span>Holding Safety Gauge</span><span class="mode-tag" style="background:rgba(34,197,94,0.15);color:#22C55E">Safe</span>`
+    :`<span>Holding Safety Gauge</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">Danger Zone</span>`;
+}
+
+function drawGauge(svgEl,T){
+  const svg=svgEl||document.getElementById("chart");svg.innerHTML="";
+  if(!T) T=getTheme();
+  const cx=W/2,cy=210,R=155,strokeW=22;
+  const [safeHrs,discardHrs]=getThresholds(dangerTemp);
+  const maxHrs=8,isSafe=safeHrs>=999;
+  const SWEEP=250,HALF=125;
+  function gP(f,r){const d=(-HALF+f*SWEEP)*Math.PI/180;return{x:cx+r*Math.sin(d),y:cy-r*Math.cos(d)}}
+  function aD(f1,f2,r){const p1=gP(f1,r),p2=gP(f2,r),sw=(f2-f1)*SWEEP;return`M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} A${r} ${r} 0 ${sw>180?1:0} 1 ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`}
+
+  el("path",{d:aD(0,1,R),fill:"none",stroke:T.grid,"stroke-width":strokeW,"stroke-linecap":"round"},svg);
+
+  if(isSafe){
+    el("path",{d:aD(0,1,R),fill:"none",stroke:"#22C55E","stroke-width":strokeW,"stroke-linecap":"round",opacity:0.8},svg);
+  }else{
+    const sf=Math.min(safeHrs/maxHrs,1),df=Math.min(discardHrs/maxHrs,1);
+    if(sf>0.005) el("path",{d:aD(0,sf,R),fill:"none",stroke:"#22C55E","stroke-width":strokeW,"stroke-linecap":"round",opacity:0.85},svg);
+    if(df>sf) el("path",{d:aD(sf,df,R),fill:"none",stroke:"#F59E0B","stroke-width":strokeW,opacity:0.85},svg);
+    if(df<0.995) el("path",{d:aD(df,1,R),fill:"none",stroke:"#EF4444","stroke-width":strokeW,"stroke-linecap":"round",opacity:0.85},svg);
+  }
+
+  for(let h=0;h<=8;h++){
+    const f=h/maxHrs;
+    const o=gP(f,R+strokeW/2+4),i=gP(f,R+strokeW/2+10);
+    el("line",{x1:o.x,y1:o.y,x2:i.x,y2:i.y,stroke:T.axisText,"stroke-width":1.5,"stroke-linecap":"round"},svg);
+    const l=gP(f,R+strokeW/2+22);
+    el("text",{x:l.x,y:l.y+3,"text-anchor":"middle",fill:T.axisText,"font-size":10,"font-weight":500},svg).textContent=h+"h";
+  }
+
+  if(!isSafe){
+    const tf=Math.min(dangerTime/maxHrs,1);
+    const nO=gP(tf,R+strokeW/2+2),nI=gP(tf,R-strokeW/2-2),nC=gP(tf,R);
+    el("line",{x1:nI.x,y1:nI.y,x2:nO.x,y2:nO.y,stroke:T.hoverLine,"stroke-width":3,"stroke-linecap":"round"},svg);
+    el("circle",{cx:nC.x,cy:nC.y,r:6,fill:T.hoverLine,stroke:T.surfaceStroke,"stroke-width":2},svg);
+  }
+
+  let status,statusColor,statusSub;
+  const tL=unit==="C"?Math.round(fToC(dangerTemp))+"°C":dangerTemp+"°F";
+  if(isSafe){status="SAFE";statusColor="#22C55E";statusSub=dangerTemp<=40?"Refrigeration — bacteria dormant":"Hot holding — bacteria cannot grow"}
+  else if(dangerTime<=safeHrs){status="SAFE";statusColor="#22C55E";const r=safeHrs-dangerTime;statusSub=r>=1?r.toFixed(1)+" hrs until caution":Math.round(r*60)+" min until caution"}
+  else if(dangerTime<=discardHrs){status="USE NOW";statusColor="#F59E0B";const r=discardHrs-dangerTime;statusSub=r>=1?r.toFixed(1)+" hrs until discard":Math.round(r*60)+" min until discard"}
+  else{status="DISCARD";statusColor="#EF4444";statusSub="Food is no longer safe to consume"}
+
+  el("text",{x:cx,y:cy-65,"text-anchor":"middle",fill:T.axisText,"font-size":13,"font-weight":600},svg).textContent="Holding at";
+  el("text",{x:cx,y:cy-38,"text-anchor":"middle",fill:T.hoverLine,"font-size":28,"font-weight":800},svg).textContent=tL;
+  el("text",{x:cx,y:cy+10,"text-anchor":"middle",fill:statusColor,"font-size":42,"font-weight":800},svg).textContent=status;
+  el("text",{x:cx,y:cy+36,"text-anchor":"middle",fill:T.axisText,"font-size":12,"font-weight":500},svg).textContent=dangerTime.toFixed(1)+" hours elapsed";
+  el("text",{x:cx,y:cy+56,"text-anchor":"middle",fill:statusColor,"font-size":12,"font-weight":600,opacity:0.8},svg).textContent=statusSub;
+
+  if(!isSafe){
+    if(safeHrs<maxHrs){const p=gP(Math.min(safeHrs/maxHrs,1),R-strokeW/2-14);el("text",{x:p.x,y:p.y,"text-anchor":"middle",fill:"#F59E0B","font-size":8,"font-weight":700},svg).textContent=safeHrs>=1?safeHrs+"h":Math.round(safeHrs*60)+"m"}
+    if(discardHrs<maxHrs){const p=gP(Math.min(discardHrs/maxHrs,1),R-strokeW/2-14);el("text",{x:p.x,y:p.y,"text-anchor":"middle",fill:"#EF4444","font-size":8,"font-weight":700},svg).textContent=discardHrs>=1?discardHrs+"h":Math.round(discardHrs*60)+"m"}
+  }
+}
+
+// ─── LEFTOVER STORAGE LOOKUP ───
+const FOODS = [
+  {cat:"Cooked Meats & Proteins",short:"🍗 Chicken",name:"🍗 Cooked Chicken & Poultry",fridge:"3–4 days",freezer:"4 months",reheat:"165°F throughout",tip:"Remove from bone before storing for faster cooling."},
+  {cat:"Cooked Meats & Proteins",short:"🥩 Ground Meat",name:"🥩 Cooked Ground Meat",fridge:"3–4 days",freezer:"3–4 months",reheat:"165°F throughout",tip:"Break into flat portions for faster cooling and even reheating."},
+  {cat:"Cooked Meats & Proteins",short:"🥩 Steaks",name:"🥩 Cooked Steaks & Chops",fridge:"3–4 days",freezer:"4–6 months",reheat:"165°F throughout",tip:"Slice thick cuts before storing so they cool faster."},
+  {cat:"Cooked Meats & Proteins",short:"🐟 Fish",name:"🐟 Cooked Fish & Seafood",fridge:"2–3 days",freezer:"3–6 months",reheat:"165°F — reheat gently",tip:"Fish spoils faster than meat. Prioritize eating within 2 days for safety and quality."},
+  {cat:"Cooked Meats & Proteins",short:"🥚 Eggs",name:"🥚 Hard-Boiled Eggs",fridge:"7 days (in shell)",freezer:"Don't freeze",reheat:"N/A",tip:"Keep in shell until ready to eat. Peeled eggs dry out faster and spoil sooner."},
+  {cat:"Cooked Meats & Proteins",short:"🍳 Scrambled Eggs",name:"🍳 Scrambled Eggs & Omelets",fridge:"3–4 days",freezer:"Don't freeze",reheat:"165°F — microwave or skillet",tip:"Cooked eggs spoil faster than you'd think. Refrigerate within 2 hours and use within 3–4 days. Texture suffers after freezing."},
+  {cat:"Prepared Dishes",short:"🍲 Soups",name:"🍲 Soups & Stews",fridge:"3–4 days",freezer:"2–3 months",reheat:"Bring to a rolling boil",tip:"Use an ice bath to cool large pots before refrigerating. Divide into smaller containers."},
+  {cat:"Prepared Dishes",short:"🍚 Rice & Pasta",name:"🍚 Cooked Rice & Pasta",fridge:"1–2 days",freezer:"1–2 months",reheat:"165°F — steam until hot",tip:"Rice grows Bacillus cereus quickly at room temp. Refrigerate within 1 hour — this is the #1 leftover people get wrong."},
+  {cat:"Prepared Dishes",short:"🍕 Pizza",name:"🍕 Pizza",fridge:"3–4 days",freezer:"1–2 months",reheat:"165°F — oven is best",tip:"Store slices flat, not stacked, for even cooling."},
+  {cat:"Prepared Dishes",short:"🥔 Potatoes",name:"🥔 Cooked Potatoes",fridge:"3–5 days",freezer:"10–12 months",reheat:"165°F — oven or microwave",tip:"Baked potatoes wrapped in foil are a botulism risk if left at room temp. Unwrap and refrigerate within 2 hours. Mashed potatoes freeze well."},
+  {cat:"Cold & Raw",short:"🥗 Salad",name:"🥗 Salads (with dressing)",fridge:"1–2 days",freezer:"Don't freeze",reheat:"N/A",tip:"Dressed salads wilt fast and can harbor bacteria. Undressed components last 3–5 days stored separately."},
+  {cat:"Cold & Raw",short:"🥗 Meat Salad",name:"🥗 Salads (with meat/eggs)",fridge:"1–2 days",freezer:"Don't freeze",reheat:"N/A",tip:"Chicken salad, tuna salad, and egg salad are high-risk. The mayo isn't the problem — it's the protein. Use within 1–2 days."},
+  {cat:"Cold & Raw",short:"🍣 Sushi",name:"🍣 Sushi & Raw Fish",fridge:"24 hours max",freezer:"Don't freeze (prepared)",reheat:"N/A",tip:"Sushi is a same-day food. After 24 hours in the fridge, discard regardless of appearance or smell."},
+  {cat:"Cold & Raw",short:"🫐 Berries",name:"🫐 Fresh Berries",fridge:"3–7 days",freezer:"8–12 months",reheat:"N/A",tip:"Don't wash until ready to eat — moisture accelerates mold. Strawberries last 3–5 days, blueberries up to 7. Toss any berries with visible mold — spores spread to neighbors."},
+  {cat:"Dairy & Baked Goods",short:"🧀 Soft Cheese",name:"🧀 Soft Cheese (brie, ricotta)",fridge:"1–2 weeks",freezer:"Don't freeze",reheat:"N/A",tip:"Soft cheeses support Listeria growth even when refrigerated. Discard if mold appears — don't just cut it off."},
+  {cat:"Dairy & Baked Goods",short:"🧀 Hard Cheese",name:"🧀 Hard Cheese (cheddar, parmesan)",fridge:"3–4 weeks",freezer:"6–8 months",reheat:"N/A",tip:"Hard cheeses are low-moisture and resist bacteria. If mold appears, cut 1 inch around and below — the rest is safe."},
+  {cat:"Dairy & Baked Goods",short:"🍪 Cookies",name:"🍪 Cookies & Baked Goods",fridge:"1–2 weeks",freezer:"3–6 months",reheat:"N/A — optional warm-up",tip:"Most baked goods are low-moisture and shelf-stable for days at room temp. Refrigerate items with cream, custard, or cream cheese frosting."},
+  {cat:"Dairy & Baked Goods",short:"🎂 Cakes",name:"🎂 Cakes with Frosting",fridge:"3–5 days",freezer:"2–4 months",reheat:"N/A",tip:"Buttercream and fondant cakes are fine at room temp for 1–2 days. Cream cheese or whipped cream frosting must be refrigerated."},
+];
+
+let currentFood = 0;
+
+function drawCooling(){
+  const svg=document.getElementById("chart");svg.innerHTML="";const T=getTheme();
+  hideTip();
+  svg.setAttribute("viewBox","0 0 780 0");
+  svg.style.height="0";
+  document.getElementById("dangerTempSelect").style.display="none";
+  document.getElementById("dangerTimeSlider").style.display="none";
+  document.getElementById("coolingContent").style.display="block";
+  buildLookup();
+  document.getElementById("chartLabel").innerHTML=`<span>Leftover Storage Guide</span><span class="mode-tag" style="background:rgba(59,130,246,0.15);color:#3B82F6">Quick Reference</span>`;
+}
+
+function buildLookup(){
+  const cc=document.getElementById("coolingContent");
+  const f=FOODS[currentFood];
+
+  // Determine if reheat is N/A
+  const noReheat = f.reheat === "N/A" || f.reheat.startsWith("N/A");
+  const reheatBg = noReheat ? "rgba(107,109,120,0.1)" : "rgba(245,158,11,0.1)";
+  const reheatColor = noReheat ? "#6B6D78" : "#F59E0B";
+
+  let html = ``;
+  let lastCat = "";
+  FOODS.forEach((fd,i) => {
+    if(fd.cat !== lastCat){
+      if(lastCat) html += `</div>`;
+      html += `<div class="lookup-cat-label">${fd.cat}</div><div class="lookup-tabs">`;
+      lastCat = fd.cat;
+    }
+    html += `<button class="${i===currentFood?'active':''}" onclick="currentFood=${i};buildLookup()">${fd.short}</button>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="lookup-card">
+    <div class="food-name">${f.name}</div>
+    <div class="lookup-grid">
+      <div class="lookup-item" style="background:rgba(59,130,246,0.1)">
+        <div class="li-label" style="color:#3B82F6">Fridge (≤40°F)</div>
+        <div class="li-value" style="color:#3B82F6">${f.fridge}</div>
+      </div>
+      <div class="lookup-item" style="background:rgba(123,104,174,0.1)">
+        <div class="li-label" style="color:#7B68AE">Freezer (≤0°F)</div>
+        <div class="li-value" style="color:#7B68AE">${f.freezer}</div>
+      </div>
+      <div class="lookup-item" style="background:${reheatBg}">
+        <div class="li-label" style="color:${reheatColor}">Reheat To</div>
+        <div class="li-value" style="color:${reheatColor}">${f.reheat}</div>
+      </div>
+    </div>
+    <div class="lookup-reheat">💡 <strong>Tip:</strong> ${f.tip}</div>
+    ${f.short.includes("Soups") || f.short.includes("Rice") ? `<div class="batch-tip">
+      <button class="batch-toggle" id="batchToggle" onclick="toggleBatch()">
+        🍲 Making a large batch? Important cooling info
+        <span class="arrow">▼</span>
+      </button>
+      <div class="batch-body" id="batchBody">
+        <strong>Normal home portions</strong> (1–4 servings) cool down in the fridge just fine — no special steps needed. But for <strong>large volumes</strong> (big pots of soup, full casserole dishes, bulk meal prep), the center of the food can stay in the danger zone for hours while the outside cools.<br><br>
+        <strong>The FDA two-stage rule:</strong> Food must go from 135°F → 70°F within 2 hours, then from 70°F → 41°F within 4 more hours (6 hours total). If it's not cooling fast enough:<br><br>
+        • <strong>Use an ice bath</strong> — place the pot in a sink of ice water and stir frequently<br>
+        • <strong>Divide into shallow containers</strong> — no deeper than 4 inches<br>
+        • <strong>Use ice paddles</strong> — fill a food-safe paddle with ice and stir directly<br>
+        • <strong>Add ice as an ingredient</strong> — for soups/stocks, prepare with less water and add ice to drop temp fast<br>
+        • <strong>Don't stack hot containers</strong> in the fridge — leave space for air circulation
+      </div>
+    </div>` : ``}
+  </div>`;
+
+  cc.innerHTML = html;
+}
+
+function toggleBatch(){
+  const t=document.getElementById("batchToggle"),b=document.getElementById("batchBody");
+  t.classList.toggle("open");b.classList.toggle("open");
+}
+
+// ─── TOOLTIP ───
+function showTip(pathogens,activeSet,calcFn,fmtFn,xS,yS){
+  const T=getTheme();
+  const tip=document.getElementById("tooltip"),tl=document.getElementById("tooltipTemp"),tr=document.getElementById("tooltipRows");
+  tl.textContent=dispTemp(hoverTemp);tr.innerHTML="";
+  const sorted=pathogens.filter(p=>activeSet.has(p.id)).sort((a,b)=>calcFn(b.refTime,b.z,hoverTemp)-calcFn(a.refTime,a.z,hoverTemp));
+  sorted.forEach(p=>{const t=calcFn(p.refTime,p.z,hoverTemp);const nm=p.name.length>28?p.name.slice(0,26)+"…":p.name;const row=document.createElement("div");row.className="row";row.innerHTML=`<span class="name"><span class="dot" style="background:${p.color}"></span>${nm}</span><span class="value" style="color:${p.color}">${fmtFn(t)}</span>`;tr.appendChild(row)});
+  tip.classList.add("visible");
+  removeHov();
+  const svg=document.getElementById("chart"),hx=xS(hoverTemp);
+  el("line",{x1:hx,x2:hx,y1:M.t,y2:M.t+PH,stroke:T.hoverLine,"stroke-width":0.8,opacity:0.3,"stroke-dasharray":"3,3",class:"hov"},svg);
+  sorted.forEach(p=>{const y=yS(calcFn(p.refTime,p.z,hoverTemp));if(y>=M.t-2&&y<=M.t+PH+2)el("circle",{cx:hx,cy:y,r:4,fill:p.color,stroke:T.surfaceStroke,"stroke-width":2,class:"hov"},svg)});
+}
+function removeHov(){document.querySelectorAll(".hov").forEach(e=>e.remove())}
+function hideTip(){hoverTemp=null;document.getElementById("tooltip").classList.remove("visible");removeHov()}
+
+// ─── LEGEND ───
+function buildLegend(){
+  const c=document.getElementById("legend");c.innerHTML="";
+  if(tab==="danger"||tab==="cooling"){c.style.display="none";return}
+  c.style.display="flex";
+  const P=tab==="heat"?HEAT_PATHOGENS:FREEZE_PATHOGENS;
+  const A=tab==="heat"?heatActive:freezeActive;
+  const tb=document.createElement("button");tb.className="toggle-all";
+  tb.textContent=A.size===P.length?"Clear All":"Show All";
+  tb.addEventListener("click",()=>{if(A.size===P.length)A.clear();else P.forEach(p=>A.add(p.id));draw()});
+  c.appendChild(tb);
+  P.forEach(p=>{const b=document.createElement("button");const isA=A.has(p.id);b.className=isA?"active":"";b.style.color=isA?p.color:"";b.style.borderColor=isA?p.color+"50":"";b.style.background=isA?p.color+"15":"";
+  b.innerHTML=`<span class="ldot" style="background:${p.color}"></span>${p.name}`;
+  b.addEventListener("click",()=>{A.has(p.id)?A.delete(p.id):A.add(p.id);draw()});
+  c.appendChild(b)});
+}
+
+// ─── ZONES / FOOTER ───
+function buildZones(){
+  const z=document.getElementById("zones");
+  if(tab==="heat"){z.innerHTML=`
+    <div class="zone-card" style="border-left:3px solid #F4A261"><div class="zt" style="color:#F4A261">${dispTemp(135)} – ${dispTemp(145)}</div><div class="zl">Sous-Vide Zone</div><div class="zd">Safe with extended hold times (minutes to hours). Requires precise time control.</div></div>
+    <div class="zone-card" style="border-left:3px solid #7B68AE"><div class="zt" style="color:#7B68AE">${dispTemp(150)} – ${dispTemp(155)}</div><div class="zl">Rapid Decline</div><div class="zd">Kill times plummet from minutes to seconds. Most pathogens eliminated within 1–5 min.</div></div>
+    <div class="zone-card" style="border-left:3px solid #2A9D8F"><div class="zt" style="color:#2A9D8F">${dispTemp(160)} – ${dispTemp(165)}</div><div class="zl">Instant Kill Zone</div><div class="zd">All vegetative pathogens destroyed in under 1 second. Click on the chart to zoom in.</div></div>`}
+  else if(tab==="freeze"){z.innerHTML=`
+    <div class="zone-card" style="border-left:3px solid #5A7FC4"><div class="zt" style="color:#5A7FC4">${dispTemp(20)} → ${dispTemp(0)}</div><div class="zl">Home Freezer Range</div><div class="zd">Standard home freezer (0°F / −18°C). Effective with multi-day holds per FDA guidelines.</div></div>
+    <div class="zone-card" style="border-left:3px solid #7B68AE"><div class="zt" style="color:#7B68AE">${dispTemp(0)} → ${dispTemp(-20)}</div><div class="zl">Deep Freeze</div><div class="zd">Commercial freezer range. FDA-approved for sushi-grade fish at −4°F for 7 days.</div></div>
+    <div class="zone-card" style="border-left:3px solid #2A9D8F"><div class="zt" style="color:#2A9D8F">${dispTemp(-20)} → ${dispTemp(-30)}</div><div class="zl">Flash Freeze</div><div class="zd">Industrial blast freezing. Parasites destroyed in hours. FDA: −31°F for 15 hours.</div></div>`}
+  else if(tab==="danger"){z.innerHTML=`
+    <div class="zone-card" style="border-left:3px solid #3B82F6"><div class="zt" style="color:#3B82F6">Below ${dispTemp(40)}</div><div class="zl">Safe Cold Holding</div><div class="zd">Bacteria essentially dormant. Refrigeration (≤40°F / 4°C) stops meaningful growth. Standard food storage.</div></div>
+    <div class="zone-card" style="border-left:3px solid #E63946"><div class="zt" style="color:#E63946">${dispTemp(40)} – ${dispTemp(140)}</div><div class="zl">Danger Zone</div><div class="zd">Bacteria multiply rapidly. FDA: discard food left in this range for more than 2 hours (1 hour above 90°F).</div></div>
+    <div class="zone-card" style="border-left:3px solid #2A9D8F"><div class="zt" style="color:#2A9D8F">Above ${dispTemp(140)}</div><div class="zl">Safe Hot Holding</div><div class="zd">Bacteria cannot grow above 140°F / 60°C. Proper hot holding keeps food safe indefinitely during service.</div></div>`}
+  else{z.innerHTML=""}
+}
+function updateSubtitle(){
+  document.getElementById("subtitle").innerHTML=
+    tab==="heat"?`Time required to achieve safe inactivation at a given internal temperature. Click the <strong style="color:#2A9D8F">Instant Kill Zone</strong> to zoom in.`:
+    tab==="freeze"?`Hold time required to destroy parasites at sub-freezing temperatures. Based on FDA and USDA freeze-destruction guidelines.`:
+    tab==="danger"?`Select the temperature your food is being held at, then drag the slider or click the gauge to set how long it's been sitting out. The gauge shows whether your food is <strong style="color:#22C55E">SAFE</strong>, needs to be <strong style="color:#F59E0B">USED NOW</strong>, or should be <strong style="color:#EF4444">DISCARDED</strong> — based on FDA time-and-temperature guidelines.`:
+    `Select a food type to see how long it lasts in the fridge, freezer, and how to reheat it safely. Based on USDA and FDA guidelines.`;
+}
+function updateFootnote(){
+  document.getElementById("footnote").textContent=
+    tab==="heat"?"* S. aureus toxin, C. botulinum toxin, and bacterial spores require extreme conditions (e.g. pressure canning at 250°F/121°C). This chart applies to vegetative cells only.":
+    tab==="freeze"?"* Some Trichinella strains in wild game (bear, wild boar) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
+    tab==="danger"?"* Two official standards exist: the FDA Food Code defines the danger zone as 41°F–135°F (enforced in commercial kitchens), while the USDA uses a wider 40°F–140°F range for consumer education. This tool uses the USDA's more conservative range to provide a greater margin of safety for home use. Growth rates are generalized across common foodborne pathogens (Salmonella, E. coli, Listeria, S. aureus). Actual rates vary by pathogen, food type, moisture, pH, and other factors. The 2-hour rule applies to the total cumulative time in the danger zone, not per-session.":
+    "* Storage times are based on USDA and FDA guidelines for food kept at a constant 40°F or below. Quality may decline before safety does — \"use by\" dates refer to quality, not safety. Always refrigerate leftovers within 2 hours of cooking. When in doubt, throw it out.";
+}
+function updateInfoBanner(){
+  const b=document.getElementById("infoBanner");
+  const d=document.getElementById("disclaimer");
+  if(tab==="freeze"){
+    b.innerHTML=`<div class="info-banner"><strong>⚠ Important:</strong> Freezing does NOT kill bacteria (Salmonella, E. coli, Listeria, etc.) — they become dormant and reactivate upon thawing. This chart shows <strong>parasites only</strong>. Always cook food to safe internal temperatures to eliminate bacterial pathogens.</div>`;
+    d.style.display="none";
+  } else if(tab==="danger"){
+    b.innerHTML=`<div class="info-banner"><strong>⚠ The 2-Hour / 4-Hour Rule:</strong> Food in the danger zone (${dispTemp(40)}–${dispTemp(140)}) for <strong>under 2 hours</strong> → refrigerate or use immediately. <strong>2–4 hours</strong> → use immediately, do not refrigerate. <strong>Over 4 hours</strong> → discard. Time is cumulative across all exposures.</div>`;
+    d.style.display="block";
+  } else if(tab==="cooling"){
+    b.innerHTML=`<div class="info-banner"><strong>⚠ The #1 Rule:</strong> Refrigerate leftovers <strong>within 2 hours</strong> of cooking. Use shallow containers for large amounts. Eat or freeze within the storage window shown below.</div>`;
+    d.style.display="none";
+  } else {
+    b.innerHTML="";
+    d.style.display="none";
+  }
+}
+
+// ─── CONTROLS ───
+function setUnit(u){unit=u;document.querySelectorAll("#unitToggle button").forEach(b=>b.classList.toggle("active",b.textContent.includes(u)));draw()}
+let dangerDisclaimed=false;
+function setTab(t){
+  if(t==="danger"&&!dangerDisclaimed){
+    document.getElementById("splashOverlay").style.display="flex";
+    window._pendingTab=t;
+    return;
+  }
+  tab=t;hoverTemp=null;hideTip();if(t==="heat")heatMode="overview";
+  document.querySelectorAll("#tabBar button").forEach((b,i)=>b.classList.toggle("active",i===(t==="heat"?0:t==="freeze"?1:t==="danger"?2:3)));
+  draw();
+}
+function dismissSplash(){
+  dangerDisclaimed=true;
+  document.getElementById("splashOverlay").style.display="none";
+  if(window._pendingTab){setTab(window._pendingTab);window._pendingTab=null}
+}
+function toggleTheme(){
+  theme=theme==="dark"?"light":"dark";
+  document.body.classList.toggle("light",theme==="light");
+  document.getElementById("themeBtn").textContent=theme==="dark"?"🌙":"☀️";
+  document.getElementById("themeBtn").title=theme==="dark"?"Switch to light mode":"Switch to dark mode";
+  draw();
+}
+function toggleSources(){const t=document.getElementById("srcToggle"),b=document.getElementById("srcBody");t.classList.toggle("open");b.classList.toggle("open")}
+
+draw();
+</script>
+</body>
+</html>
