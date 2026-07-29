@@ -115,6 +115,21 @@
   .splash-box .splash-accept{width:100%;padding:12px;background:#F59E0B;color:#000;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.2s}
   .splash-box .splash-accept:hover{background:#D97706}
 
+  /* Food profile presets */
+  .food-profiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:4px 8px 12px;align-items:center}
+  .food-profiles .fp-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-right:4px}
+  .food-profiles button{background:transparent;border:1px solid var(--border);border-radius:7px;padding:5px 11px;font-size:11px;font-family:inherit;cursor:pointer;font-weight:600;transition:all 0.15s;color:var(--text3)}
+  .food-profiles button:hover{border-color:var(--border-hover);color:var(--text2)}
+  .food-profiles button.fp-active{background:rgba(34,197,94,0.12);color:#22C55E;border-color:#22C55E80}
+  .food-profile-banner{display:flex;align-items:center;gap:10px;padding:8px 14px;margin-bottom:8px;border-radius:8px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);font-size:12px;color:var(--text2);line-height:1.5}
+  .food-profile-banner .fpb-temp{font-size:18px;font-weight:800;color:#22C55E;flex-shrink:0}
+  .food-profile-banner .fpb-close{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;flex-shrink:0}
+  .food-profile-banner .fpb-close:hover{color:var(--text)}
+
+  /* Export button */
+  .export-btn{background:var(--toggle-bg);border:1px solid var(--border);border-radius:8px;height:34px;padding:0 12px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:var(--text3);display:flex;align-items:center;gap:5px;transition:all 0.2s;white-space:nowrap}
+  .export-btn:hover{border-color:var(--border-hover);color:var(--text2)}
+
   /* Gauge controls */
   .gauge-slider-wrap{padding:4px 60px 6px;text-align:center}
   .gauge-slider-wrap label{font-size:15px;color:var(--text2);font-weight:600;display:block;margin-bottom:8px}
@@ -241,6 +256,15 @@
     /* Footnote */
     .footnote{font-size:11px;line-height:1.6}
 
+    /* Food profiles */
+    .food-profiles{gap:4px;padding:4px 4px 10px}
+    .food-profiles .fp-label{font-size:9px;margin-right:2px}
+    .food-profiles button{padding:4px 8px;font-size:10px}
+    .food-profile-banner{padding:6px 10px;font-size:11px;gap:8px;flex-wrap:wrap}
+    .food-profile-banner .fpb-temp{font-size:15px}
+    .export-btn{height:30px;padding:0 10px;font-size:11px}
+    .export-btn .export-text{display:none}
+
     /* Danger gauge controls */
     .temp-select{padding:6px 4px 10px;gap:5px}
     .temp-select button{padding:7px 10px;font-size:11px;border-radius:6px}
@@ -287,6 +311,44 @@
     .temp-select button{padding:6px 8px;font-size:10px}
     .lookup-grid{grid-template-columns:1fr}
   }
+
+  /* Print overlay */
+  .print-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:200;overflow-y:auto;padding:24px}
+  .print-overlay.active{display:block}
+  .print-sheet{max-width:800px;margin:0 auto;background:#fff;color:#1a1a1a;padding:28px 32px;border-radius:12px;font-size:11px;line-height:1.4}
+  .print-sheet h1{font-size:20px;font-weight:800;margin-bottom:2px;letter-spacing:-0.02em;color:#1a1a1a}
+  .print-sheet .ps-tagline{font-size:10px;color:#666;margin-bottom:12px}
+  .print-sheet h2{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin:12px 0 6px;color:#E63946;border-bottom:2px solid #E63946;padding-bottom:3px}
+  .print-sheet table{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10px}
+  .print-sheet th{background:#1a1a1a;color:#fff;padding:5px 7px;text-align:left;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:0.04em}
+  .print-sheet td{padding:5px 7px;border-bottom:1px solid #ddd;vertical-align:top}
+  .print-sheet tr:nth-child(even){background:#f8f8f8}
+  .print-sheet .ps-temp{font-weight:800;color:#E63946;font-size:13px;white-space:nowrap}
+  .print-sheet .ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .print-sheet .ps-box{border:1.5px solid #1a1a1a;border-radius:6px;padding:7px 9px}
+  .print-sheet .ps-box-title{font-weight:800;font-size:11px;margin-bottom:2px}
+  .print-sheet .ps-box-body{font-size:10px;color:#333;line-height:1.45}
+  .print-sheet .ps-danger{border-color:#E63946} .print-sheet .ps-danger .ps-box-title{color:#E63946}
+  .print-sheet .ps-safe{border-color:#22C55E} .print-sheet .ps-safe .ps-box-title{color:#22C55E}
+  .print-sheet .ps-warn{border-color:#F59E0B} .print-sheet .ps-warn .ps-box-title{color:#F59E0B}
+  .print-sheet .ps-info{border-color:#3B82F6} .print-sheet .ps-info .ps-box-title{color:#3B82F6}
+  .print-sheet .ps-footer{margin-top:10px;font-size:8px;color:#999;text-align:center;border-top:1px solid #ddd;padding-top:5px}
+  .print-close{position:fixed;top:16px;right:16px;z-index:210;background:#E63946;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+  .print-close:hover{background:#C5303C}
+  .print-action{display:block;margin:16px auto 0;background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:12px 32px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+  .print-action:hover{background:#333}
+
+  /* When actually printing, hide app and chrome, show only the sheet */
+  @media print{
+    body{padding:0!important;background:#fff!important}
+    .container,.print-close,.print-action{display:none!important}
+    .print-overlay{position:static!important;padding:0!important;background:#fff!important}
+    .print-sheet{padding:0!important;border-radius:0!important;max-width:100%!important}
+    .print-sheet th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .print-sheet tr:nth-child(even){-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .print-sheet .ps-box{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    @page{size:letter;margin:0.4in 0.5in}
+  }
 </style>
 </head>
 <body>
@@ -298,6 +360,7 @@
         <button class="active" onclick="setUnit('F')">°F</button>
         <button onclick="setUnit('C')">°C</button>
       </div>
+      <button class="export-btn" onclick="printReference()" title="Print a one-page food safety quick reference">🖨️ <span class="export-text">Print Reference</span></button>
       <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
     </div>
   </div>
@@ -313,6 +376,8 @@
 
   <div class="chart-container" id="chartContainer">
     <div class="chart-label" id="chartLabel"></div>
+    <div id="foodProfileSelect" style="display:none"></div>
+    <div id="foodProfileBanner" style="display:none"></div>
     <div id="dangerTempSelect" style="display:none"></div>
     <svg id="chart" viewBox="0 0 780 460"></svg>
     <div id="dangerTimeSlider" style="display:none"></div>
@@ -397,6 +462,12 @@
   </div>
 </div>
 
+<!-- Print overlay — populated by JS, hidden until user clicks Print Reference -->
+<div class="print-overlay" id="printOverlay">
+  <button class="print-close" onclick="closePrintView()">✕ Close</button>
+  <div class="print-sheet" id="printSheet"></div>
+</div>
+
 <script>
 // ─── DATA ───
 const HEAT_PATHOGENS = [
@@ -447,6 +518,17 @@ let heatActive=new Set(HEAT_PATHOGENS.map(p=>p.id));
 let freezeActive=new Set(FREEZE_PATHOGENS.map(p=>p.id));
 let dangerTemp=75, dangerTime=0;
 let hoverTemp=null;
+
+// ─── FOOD PROFILES ───
+const FOOD_PROFILES = [
+  {id:"poultry",label:"🍗 Poultry",temp:165,logRed:"7-log",note:"All poultry — whole, ground, stuffed. No exceptions.",pathogens:["salmonella","campylobacter","listeria","clostridium"]},
+  {id:"ground",label:"🥩 Ground Meat",temp:160,logRed:"6.5-log",note:"Ground beef, pork, lamb, veal. Grinding mixes bacteria throughout.",pathogens:["ecoli","salmonella","clostridium","listeria"]},
+  {id:"wholecut",label:"🥩 Whole Cuts",temp:145,logRed:"6.5-log",note:"Steaks, roasts, chops — beef, pork, lamb, veal. 3-minute rest required.",pathogens:["salmonella","ecoli","clostridium"]},
+  {id:"fish",label:"🐟 Fish",temp:145,logRed:"6-log",note:"Until opaque and flakes easily. Sushi-grade must be pre-frozen for parasites.",pathogens:["vibrio","listeria","hepatitisA"]},
+  {id:"eggs",label:"🥚 Eggs",temp:160,logRed:"7-log",note:"Until yolk and white are firm. Pasteurized eggs are safe for raw preparations.",pathogens:["salmonella"]},
+  {id:"reheat",label:"♻️ Reheating",temp:165,logRed:"7-log",note:"All leftovers and reheated foods must reach 165°F within 2 hours.",pathogens:["listeria","salmonella","clostridium","ecoli"]},
+];
+let activeProfile = null;
 
 // ─── THEME ───
 function getTheme() {
@@ -499,6 +581,13 @@ function draw(){
   if(tab!=="danger"&&tab!=="cooling"&&tab!=="pathogen"){
     document.getElementById("dangerTempSelect").style.display="none";
     document.getElementById("dangerTimeSlider").style.display="none";
+  }
+  if(tab==="heat"){
+    document.getElementById("foodProfileSelect").style.display="block";
+    buildFoodProfiles();
+  } else {
+    document.getElementById("foodProfileSelect").style.display="none";
+    document.getElementById("foodProfileBanner").style.display="none";
   }
   if(tab!=="cooling") document.getElementById("coolingContent").style.display="none";
   if(tab!=="pathogen") document.getElementById("pathogenContent").style.display="none";
@@ -554,6 +643,9 @@ function drawHeat(){
     const d=pts.map((pt,i)=>`${i===0?"M":"L"}${pt.x.toFixed(2)},${pt.y.toFixed(2)}`).join(" ");
     el("path",{d,fill:"none",stroke:p.color,"stroke-width":isA?2.2:0.5,opacity:isA?1:0.08,"stroke-linecap":"round","stroke-linejoin":"round"},svg);
   });
+
+  // Food profile overlay
+  drawFoodProfileOverlay(svg,xS,yS,isDet);
 
   // Overlay
   const ov=el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"transparent",style:"cursor:crosshair"},svg);
@@ -1127,7 +1219,7 @@ function updateSubtitle(){
 function updateFootnote(){
   document.getElementById("footnote").textContent=
     tab==="heat"?"* S. aureus toxin, C. botulinum toxin, and bacterial spores require extreme conditions (e.g. pressure canning at 250°F/121°C). This chart applies to vegetative cells only.":
-    tab==="freeze"?"* Some Trichinella strains in wild game (bear, wild boar) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
+    tab==="freeze"?"* Some Trichinella strains in wild game (bear, walrus) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
     tab==="danger"?"* Two official standards exist: the FDA Food Code defines the danger zone as 41°F–135°F (enforced in commercial kitchens), while the USDA uses a wider 40°F–140°F range for consumer education. This tool uses the USDA's more conservative range to provide a greater margin of safety for home use. Growth rates are generalized across common foodborne pathogens (Salmonella, E. coli, Listeria, S. aureus). Actual rates vary by pathogen, food type, moisture, pH, and other factors. The 2-hour rule applies to the total cumulative time in the danger zone, not per-session.":
     tab==="pathogen"?"* Pathogen-food associations and likelihood ratings are based on CDC outbreak surveillance data, FDA recall patterns, and published food microbiology literature. \"Very Common\" = frequently implicated in outbreaks from this food. \"Common\" = regularly found or documented. \"Less Common\" / \"Rare\" = occasional or under specific conditions. Individual risk depends on preparation, sourcing, and handling.":
     "* Storage times are based on USDA and FDA guidelines for food kept at a constant 40°F or below. Quality may decline before safety does — \"use by\" dates refer to quality, not safety. Always refrigerate leftovers within 2 hours of cooking. When in doubt, throw it out.";
@@ -1151,6 +1243,164 @@ function updateInfoBanner(){
     b.innerHTML="";
     d.style.display="none";
   }
+}
+
+// ─── FOOD PROFILES ───
+function buildFoodProfiles(){
+  const c=document.getElementById("foodProfileSelect");
+  c.className="food-profiles";
+  let html=`<span class="fp-label">Food Profile:</span>`;
+  FOOD_PROFILES.forEach(fp=>{
+    html+=`<button class="${activeProfile===fp.id?'fp-active':''}" onclick="setProfile('${fp.id}')">${fp.label}</button>`;
+  });
+  c.innerHTML=html;
+
+  const b=document.getElementById("foodProfileBanner");
+  if(activeProfile){
+    const fp=FOOD_PROFILES.find(p=>p.id===activeProfile);
+    const tempD=unit==="C"?Math.round(fToC(fp.temp))+"°C":fp.temp+"°F";
+    b.style.display="flex";
+    b.className="food-profile-banner";
+    b.innerHTML=`<span class="fpb-temp">${tempD}</span><span><strong>${fp.label.replace(/^.{2}\s*/,'')}</strong> — ${fp.logRed} reduction. ${fp.note}</span><button class="fpb-close" onclick="setProfile(null)" title="Clear profile">✕</button>`;
+  } else {
+    b.style.display="none";
+  }
+}
+
+function setProfile(id){
+  activeProfile=activeProfile===id?null:id;
+  if(activeProfile){
+    const fp=FOOD_PROFILES.find(p=>p.id===activeProfile);
+    // Activate only the pathogens relevant to this food
+    heatActive.clear();
+    fp.pathogens.forEach(pid=>heatActive.add(pid));
+  } else {
+    // Restore all pathogens
+    HEAT_PATHOGENS.forEach(p=>heatActive.add(p.id));
+  }
+  draw();
+}
+
+function drawFoodProfileOverlay(svg,xS,yS,isDet){
+  if(!activeProfile||tab!=="heat") return;
+  const fp=FOOD_PROFILES.find(p=>p.id===activeProfile);
+  if(!fp) return;
+  const T=getTheme();
+  const xMin=isDet?148:135, xMax=180;
+  if(fp.temp<xMin||fp.temp>xMax) return;
+  const x=xS(fp.temp);
+
+  // Target temperature line
+  el("line",{x1:x,x2:x,y1:M.t,y2:M.t+PH,stroke:"#22C55E","stroke-width":1.5,"stroke-dasharray":"8,4",opacity:0.7},svg);
+
+  // Label at top
+  const tempLabel=unit==="C"?Math.round(fToC(fp.temp))+"°C":fp.temp+"°F";
+  const labelW=80;
+  el("rect",{x:x-labelW/2,y:M.t+8,width:labelW,height:20,rx:4,fill:"#22C55E",opacity:0.9},svg);
+  el("text",{x:x,y:M.t+22,"text-anchor":"middle",fill:"#fff","font-size":10,"font-weight":700},svg).textContent=`${tempLabel} target`;
+
+  // Draw dots and time labels at intersection points
+  HEAT_PATHOGENS.forEach(p=>{
+    if(!heatActive.has(p.id)) return;
+    const time=heatCalc(p.refTime,p.z,fp.temp);
+    const y=yS(time);
+    if(y>=M.t-2&&y<=M.t+PH+2){
+      el("circle",{cx:x,cy:y,r:5,fill:p.color,stroke:"#fff","stroke-width":1.5,opacity:0.95},svg);
+      // Time label
+      const tStr=fmtMin(time);
+      el("text",{x:x+10,y:y+4,"text-anchor":"start",fill:p.color,"font-size":9,"font-weight":700},svg).textContent=tStr;
+    }
+  });
+}
+
+// ─── PRINT REFERENCE ───
+function printReference(){
+  const tempU=unit==="C"?"°C":"°F";
+  const t=f=>unit==="C"?Math.round(fToC(f))+tempU:f+tempU;
+
+  const ccpData=[
+    {food:"Poultry (chicken, turkey — all forms)",temp:t(165),time:"Instant (< 1 sec)",notes:"No pink required. Use thermometer — color unreliable."},
+    {food:"Ground Meat (beef, pork, lamb, veal)",temp:t(160),time:"Instant",notes:"Grinding mixes surface bacteria throughout."},
+    {food:"Whole Cuts — Beef, Pork, Lamb (steaks, roasts, chops)",temp:t(145),time:"3-min rest",notes:"Carryover heat during rest completes kill."},
+    {food:"Fish & Seafood",temp:t(145),time:"Until opaque",notes:"Sushi-grade must be pre-frozen per FDA."},
+    {food:"Eggs",temp:t(160),time:"Until firm",notes:"Both yolk and white. Pasteurized OK for raw prep."},
+    {food:"Shellfish (oysters, clams, mussels)",temp:t(145),time:"Until shells open",notes:"Discard any that don't open. Vibrio risk."},
+    {food:"Reheating all leftovers",temp:t(165),time:"Within 2 hrs",notes:"Must reach temp within 2 hours of starting reheat."},
+    {food:"Hot holding (service)",temp:t(140),time:"Indefinite if held",notes:"Continuous holding above "+t(140)+". Check every 2 hrs."},
+  ];
+
+  const storageData=[
+    {food:"Cooked Chicken/Poultry",fridge:"3–4 days",freezer:"4 months"},
+    {food:"Cooked Ground Meat",fridge:"3–4 days",freezer:"3–4 months"},
+    {food:"Cooked Steaks/Chops",fridge:"3–4 days",freezer:"4–6 months"},
+    {food:"Cooked Fish/Seafood",fridge:"2–3 days",freezer:"3–6 months"},
+    {food:"Soups & Stews",fridge:"3–4 days",freezer:"2–3 months"},
+    {food:"Cooked Rice & Pasta",fridge:"1–2 days",freezer:"1–2 months"},
+    {food:"Deli Meats (opened)",fridge:"3–5 days",freezer:"1–2 months"},
+    {food:"Sushi/Raw Fish",fridge:"24 hrs max",freezer:"Don't freeze"},
+  ];
+
+  const sheet=document.getElementById("printSheet");
+  sheet.innerHTML=`
+<h1>🦠 Food Safety Quick Reference</h1>
+<p class="ps-tagline">Foodborne Pathogen Safety Tool · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · Temperatures in ${tempU}</p>
+
+<h2>🔥 Minimum Safe Internal Temperatures</h2>
+<table>
+<tr><th>Food</th><th>Temp</th><th>Hold Time</th><th>Notes</th></tr>
+${ccpData.map(r=>`<tr><td>${r.food}</td><td class="ps-temp">${r.temp}</td><td>${r.time}</td><td>${r.notes}</td></tr>`).join("")}
+</table>
+
+<div class="ps-grid">
+  <div class="ps-box ps-danger">
+    <div class="ps-box-title">⚠️ Danger Zone: ${t(40)} – ${t(140)}</div>
+    <div class="ps-box-body">Bacteria double every 20 min. <strong>2-hr rule:</strong> refrigerate or use within 2 hrs. <strong>Above ${t(90)}:</strong> 1-hr limit. <strong>After 4 hrs total</strong> in zone → DISCARD.</div>
+  </div>
+  <div class="ps-box ps-safe">
+    <div class="ps-box-title">✅ Safe Holding Zones</div>
+    <div class="ps-box-body"><strong>Cold:</strong> ≤ ${t(40)} — bacteria dormant.<br><strong>Hot:</strong> ≥ ${t(140)} — bacteria cannot grow.<br>Check temps every 2 hours during service.</div>
+  </div>
+  <div class="ps-box ps-warn">
+    <div class="ps-box-title">🧊 Cooling (FDA 2-Stage)</div>
+    <div class="ps-box-body"><strong>Stage 1:</strong> ${t(135)} → ${t(70)} within 2 hrs<br><strong>Stage 2:</strong> ${t(70)} → ${t(41)} within 4 more hrs<br>Use ice baths, shallow pans, or blast chiller for large batches.</div>
+  </div>
+  <div class="ps-box ps-info">
+    <div class="ps-box-title">❄️ Freezing Kills Parasites, Not Bacteria</div>
+    <div class="ps-box-body">Salmonella, E. coli, Listeria survive freezing — they reactivate on thaw. Parasites (Anisakis, Trichinella) require −4°F/7 days or −31°F/15 hrs (FDA).</div>
+  </div>
+</div>
+
+<h2>🧊 Leftover Storage Limits</h2>
+<table>
+<tr><th>Food</th><th>Fridge (≤${t(40)})</th><th>Freezer (≤${t(0)})</th></tr>
+${storageData.map(r=>`<tr><td>${r.food}</td><td>${r.fridge}</td><td>${r.freezer}</td></tr>`).join("")}
+</table>
+
+<div class="ps-grid">
+  <div class="ps-box ps-warn">
+    <div class="ps-box-title">⚠️ #1 Leftover Mistake: Cooked Rice</div>
+    <div class="ps-box-body">Bacillus cereus spores survive cooking and germinate fast at room temp. Refrigerate rice within 1 hour. Use within 1–2 days.</div>
+  </div>
+  <div class="ps-box ps-info">
+    <div class="ps-box-title">📋 When in Doubt, Throw It Out</div>
+    <div class="ps-box-body">Storage times are maximums. If food looks, smells, or feels off, discard regardless. "Use by" dates refer to quality, not safety.</div>
+  </div>
+</div>
+
+<div class="ps-footer">
+  Sources: USDA FSIS Appendix A · FDA Food Code 2022 · USDA "Danger Zone" Fact Sheet · USDA "Leftovers and Food Safety" Fact Sheet<br>
+  For educational reference only. Not a substitute for certified food safety training.
+</div>
+
+<button class="print-action" onclick="window.print()">🖨️ Print This Page / Save as PDF</button>`;
+
+  document.getElementById("printOverlay").classList.add("active");
+  document.body.style.overflow="hidden";
+}
+
+function closePrintView(){
+  document.getElementById("printOverlay").classList.remove("active");
+  document.body.style.overflow="";
 }
 
 // ─── CONTROLS ───
