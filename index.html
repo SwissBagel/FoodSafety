@@ -168,33 +168,34 @@
   .batch-body.open{display:block}
   .batch-body strong{color:var(--text)}
 
-  /* Pathogen Reference tab */
-  .pathogen-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:background 0.3s}
-  .pathogen-card .food-name{font-size:20px;font-weight:800;margin-bottom:4px}
-  .pathogen-card .food-desc{font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.5}
-  .pathogen-row{border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:all 0.2s}
-  .pathogen-row:last-child{margin-bottom:0}
-  .pathogen-row-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;transition:background 0.15s}
-  .pathogen-row-header:hover{background:rgba(255,255,255,0.03)}
-  .light .pathogen-row-header:hover{background:rgba(0,0,0,0.02)}
-  .pathogen-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-  .pathogen-name{font-size:13px;font-weight:600;color:var(--text);flex:1}
-  .pathogen-likelihood{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:3px 8px;border-radius:4px;flex-shrink:0}
-  .likelihood-high{background:rgba(230,57,70,0.15);color:#E63946}
-  .likelihood-med{background:rgba(245,158,11,0.15);color:#F59E0B}
-  .likelihood-low{background:rgba(59,130,246,0.15);color:#3B82F6}
-  .pathogen-expand{color:var(--text3);font-size:14px;transition:transform 0.2s;flex-shrink:0}
-  .pathogen-row.open .pathogen-expand{transform:rotate(180deg)}
-  .pathogen-detail{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
-  .pathogen-row.open .pathogen-detail{display:block}
-  .pathogen-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-  .pathogen-detail-item{padding:10px 12px;border-radius:8px;background:var(--bg)}
-  .pathogen-detail-item .pdi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:3px}
-  .pathogen-detail-item .pdi-value{font-size:12px;font-weight:600;color:var(--text);line-height:1.4}
-  .pathogen-symptoms{grid-column:1/-1}
-  .pathogen-risk{grid-column:1/-1;padding:10px 12px;border-radius:8px;background:rgba(230,57,70,0.06);border:1px solid rgba(230,57,70,0.12)}
-  .pathogen-risk .pdi-label{color:#E63946}
-  .pathogen-risk .pdi-value{font-size:12px;color:var(--text2)}
+  /* Food Safety Reference tab */
+  .ref-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:background 0.3s}
+  .ref-card .food-name{font-size:20px;font-weight:800;margin-bottom:4px}
+  .ref-card .food-desc{font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.5}
+  .ref-safe-temp{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:10px;margin-bottom:14px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2)}
+  .ref-safe-temp .rst-icon{font-size:28px;flex-shrink:0}
+  .ref-safe-temp .rst-temp{font-size:24px;font-weight:800;color:#22C55E;flex-shrink:0}
+  .ref-safe-temp .rst-label{font-size:12px;color:var(--text2);line-height:1.5}
+  .ref-safe-temp .rst-label strong{color:var(--text)}
+  .ref-rules{list-style:none;padding:0;margin:0 0 14px}
+  .ref-rules li{font-size:13px;color:var(--text);line-height:1.6;padding:8px 12px;border-radius:8px;margin-bottom:6px;background:var(--bg);display:flex;align-items:flex-start;gap:8px}
+  .ref-rules li:last-child{margin-bottom:0}
+  .ref-rules .rule-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+  .ref-rules strong{color:var(--text)}
+  .ref-crosslinks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .ref-crosslink{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-family:inherit;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:5px}
+  .ref-crosslink:hover{border-color:var(--border-hover);color:var(--text)}
+  .ref-pathogen-toggle{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s}
+  .ref-pathogen-toggle:hover{border-color:var(--border-hover)}
+  .ref-pathogen-toggle .arrow{transition:transform 0.3s;color:var(--text3)}
+  .ref-pathogen-toggle.open .arrow{transform:rotate(180deg)}
+  .ref-pathogen-toggle.open{border-radius:8px 8px 0 0}
+  .ref-pathogen-body{display:none;background:var(--bg);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:10px 12px}
+  .ref-pathogen-body.open{display:block}
+  .ref-pathogen-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px;color:var(--text2)}
+  .ref-pathogen-item .pathogen-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .ref-pathogen-item .rp-name{flex:1;font-weight:500}
+  .ref-pathogen-item .rp-note{font-size:11px;color:var(--text3);font-style:italic}
 
   /* ─── MOBILE RESPONSIVE ─── */
   @media(max-width:680px){
@@ -270,12 +271,13 @@
     .sources-body{padding:12px 14px}
     .source-item{font-size:11px}
 
-    /* Pathogen reference */
-    .pathogen-card{padding:14px 16px}
-    .pathogen-card .food-name{font-size:17px}
-    .pathogen-detail-grid{grid-template-columns:1fr}
-    .pathogen-name{font-size:12px}
-    .pathogen-row-header{padding:10px 12px;gap:8px}
+    /* Food safety reference */
+    .ref-card{padding:14px 16px}
+    .ref-card .food-name{font-size:17px}
+    .ref-safe-temp{padding:12px 14px;gap:10px}
+    .ref-safe-temp .rst-icon{font-size:22px}
+    .ref-safe-temp .rst-temp{font-size:20px}
+    .ref-rules li{font-size:12px;padding:7px 10px}
   }
 
   @media(max-width:400px){
@@ -768,57 +770,143 @@ const FOODS = [
 
 let currentFood = 0;
 
-// ─── PATHOGEN REFERENCE DATA ───
-const PATHOGEN_INFO = {
-  listeria:{name:"Listeria monocytogenes",color:"#E63946",incubation:"1–4 weeks",symptoms:"Fever, muscle aches, nausea, diarrhea. Can cause meningitis and blood infections in severe cases.",duration:"Days to weeks — can be fatal",risk:"Pregnant women (risk of miscarriage), newborns, adults 65+, immunocompromised"},
-  salmonella:{name:"Salmonella spp.",color:"#F4A261",incubation:"6–72 hours",symptoms:"Diarrhea, fever, abdominal cramps, vomiting.",duration:"4–7 days",risk:"Children under 5, adults 65+, immunocompromised"},
-  ecoli:{name:"E. coli O157:H7",color:"#2A9D8F",incubation:"1–10 days (usually 3–4)",symptoms:"Severe bloody diarrhea, intense abdominal cramps, vomiting. Can cause hemolytic uremic syndrome (HUS) — kidney failure.",duration:"5–10 days",risk:"Children under 5 (HUS risk), adults 65+"},
-  cyclospora:{name:"Cyclospora cayetanensis",color:"#5A7FC4",incubation:"1–2 weeks",symptoms:"Watery diarrhea, loss of appetite, weight loss, bloating, fatigue, nausea.",duration:"Weeks to months if untreated",risk:"All ages. Requires prescription treatment (won't resolve on its own)."},
-  norovirus:{name:"Norovirus",color:"#7B68AE",incubation:"12–48 hours",symptoms:"Sudden vomiting, watery diarrhea, nausea, stomach cramps. Extremely contagious.",duration:"1–3 days",risk:"Young children, adults 65+. Spreads rapidly in group settings."},
-  campylobacter:{name:"Campylobacter jejuni",color:"#B07CC6",incubation:"2–5 days",symptoms:"Diarrhea (often bloody), cramping, fever, nausea.",duration:"2–10 days",risk:"Children under 5, young adults. Rare complication: Guillain-Barré syndrome."},
-  hepatitisA:{name:"Hepatitis A virus",color:"#45B7AA",incubation:"15–50 days (avg 28)",symptoms:"Fever, fatigue, nausea, jaundice (yellow skin/eyes), dark urine, abdominal pain.",duration:"Weeks to months",risk:"Unvaccinated individuals. Vaccine is highly effective."},
-  clostridium:{name:"C. perfringens",color:"#8DB255",incubation:"6–24 hours",symptoms:"Watery diarrhea, abdominal cramps. Usually no fever or vomiting.",duration:"~24 hours",risk:"Elderly, young children. Often called 'the cafeteria germ' — thrives in large batches held warm."},
-  toxoplasma:{name:"Toxoplasma gondii",color:"#3D7A44",incubation:"5–23 days",symptoms:"Often no symptoms. Flu-like when symptomatic: swollen lymph nodes, muscle aches, fatigue.",duration:"Weeks to months (organism persists)",risk:"Pregnant women (severe birth defects), immunocompromised (brain infection risk)"},
-  vibrio:{name:"Vibrio vulnificus",color:"#E8A838",incubation:"1–7 days",symptoms:"Watery diarrhea, abdominal cramps, nausea, vomiting, fever. Can cause life-threatening blood infections.",duration:"2–8 days",risk:"Liver disease, alcoholism, immunocompromised. Can be fatal within days."},
+// ─── FOOD SAFETY REFERENCE DATA ───
+const PATHOGEN_NAMES = {
+  listeria:{name:"Listeria monocytogenes",color:"#E63946"},
+  salmonella:{name:"Salmonella spp.",color:"#F4A261"},
+  ecoli:{name:"E. coli O157:H7",color:"#2A9D8F"},
+  cyclospora:{name:"Cyclospora cayetanensis",color:"#5A7FC4"},
+  norovirus:{name:"Norovirus",color:"#7B68AE"},
+  campylobacter:{name:"Campylobacter jejuni",color:"#B07CC6"},
+  hepatitisA:{name:"Hepatitis A virus",color:"#45B7AA"},
+  clostridium:{name:"C. perfringens",color:"#8DB255"},
+  toxoplasma:{name:"Toxoplasma gondii",color:"#3D7A44"},
+  vibrio:{name:"Vibrio vulnificus",color:"#E8A838"},
 };
 
-const FOOD_PATHOGEN_MAP = [
-  {cat:"Meats & Proteins",short:"🍗 Poultry",name:"🍗 Poultry (Chicken & Turkey)",desc:"The #1 source of Salmonella and Campylobacter outbreaks in the U.S.",pathogens:[
-    {id:"salmonella",likelihood:"Very Common"},{id:"campylobacter",likelihood:"Very Common"},{id:"clostridium",likelihood:"Common"},{id:"listeria",likelihood:"Less Common"}
-  ]},
-  {cat:"Meats & Proteins",short:"🥩 Ground Beef",name:"🥩 Ground Beef",desc:"Grinding mixes surface bacteria throughout the meat. Always cook to 155°F+.",pathogens:[
-    {id:"ecoli",likelihood:"Common"},{id:"salmonella",likelihood:"Common"},{id:"clostridium",likelihood:"Common"},{id:"listeria",likelihood:"Less Common"}
-  ]},
-  {cat:"Meats & Proteins",short:"🐷 Pork",name:"🐷 Pork",desc:"Historically associated with parasites, now more commonly linked to bacterial contamination.",pathogens:[
-    {id:"salmonella",likelihood:"Common"},{id:"clostridium",likelihood:"Common"},{id:"toxoplasma",likelihood:"Less Common"},{id:"ecoli",likelihood:"Less Common"}
-  ]},
-  {cat:"Meats & Proteins",short:"🥚 Eggs",name:"🥚 Eggs",desc:"Salmonella can be inside the egg — not just on the shell. Pasteurized eggs eliminate risk.",pathogens:[
-    {id:"salmonella",likelihood:"Very Common"},{id:"listeria",likelihood:"Rare"}
-  ]},
-  {cat:"Seafood",short:"🦪 Shellfish",name:"🦪 Shellfish (Oysters, Clams, Mussels)",desc:"Filter feeders concentrate pathogens from the water. Raw oysters are especially risky.",pathogens:[
-    {id:"vibrio",likelihood:"Very Common"},{id:"norovirus",likelihood:"Common"},{id:"hepatitisA",likelihood:"Less Common"},{id:"salmonella",likelihood:"Less Common"}
-  ]},
-  {cat:"Seafood",short:"🐟 Fish",name:"🐟 Fish (Raw & Smoked)",desc:"Raw preparations (sushi, ceviche) and cold-smoked fish carry distinct risks.",pathogens:[
-    {id:"vibrio",likelihood:"Common"},{id:"listeria",likelihood:"Common"},{id:"norovirus",likelihood:"Less Common"},{id:"hepatitisA",likelihood:"Less Common"}
-  ]},
-  {cat:"Produce",short:"🥬 Leafy Greens",name:"🥬 Leafy Greens (Lettuce, Spinach)",desc:"Eaten raw, so no kill step. Contamination happens in the field from water or soil.",pathogens:[
-    {id:"ecoli",likelihood:"Common"},{id:"salmonella",likelihood:"Common"},{id:"norovirus",likelihood:"Common"},{id:"cyclospora",likelihood:"Less Common"},{id:"listeria",likelihood:"Less Common"}
-  ]},
-  {cat:"Produce",short:"🍓 Fruits & Berries",name:"🍓 Fresh Fruits & Berries",desc:"Imported berries and pre-cut fruit are higher risk. Washing reduces but doesn't eliminate pathogens.",pathogens:[
-    {id:"cyclospora",likelihood:"Common"},{id:"norovirus",likelihood:"Common"},{id:"hepatitisA",likelihood:"Less Common"},{id:"salmonella",likelihood:"Less Common"}
-  ]},
-  {cat:"Produce",short:"🌱 Sprouts",name:"🌱 Raw Sprouts (Alfalfa, Bean)",desc:"Seeds sprout in warm, humid conditions — ideal for bacterial growth. CDC advises cooking sprouts.",pathogens:[
-    {id:"salmonella",likelihood:"Very Common"},{id:"ecoli",likelihood:"Common"},{id:"listeria",likelihood:"Less Common"}
-  ]},
-  {cat:"Dairy",short:"🥛 Raw Milk",name:"🥛 Unpasteurized Milk & Juice",desc:"Pasteurization exists for a reason. Raw dairy is one of the riskiest food categories.",pathogens:[
-    {id:"campylobacter",likelihood:"Very Common"},{id:"salmonella",likelihood:"Common"},{id:"ecoli",likelihood:"Common"},{id:"listeria",likelihood:"Common"}
-  ]},
-  {cat:"Dairy",short:"🧀 Soft Cheese",name:"🧀 Soft Cheese (Brie, Queso Fresco)",desc:"Listeria grows even at refrigerator temperatures, making soft cheese uniquely dangerous.",pathogens:[
-    {id:"listeria",likelihood:"Very Common"},{id:"salmonella",likelihood:"Less Common"},{id:"ecoli",likelihood:"Rare"}
-  ]},
-  {cat:"Deli & Ready-to-Eat",short:"🥪 Deli Meats",name:"🥪 Deli Meats & Hot Dogs",desc:"Ready-to-eat with no further cooking step. Listeria contamination can happen after processing.",pathogens:[
-    {id:"listeria",likelihood:"Very Common"},{id:"salmonella",likelihood:"Less Common"},{id:"clostridium",likelihood:"Less Common"}
-  ]},
+const FOOD_SAFETY_REF = [
+  {cat:"Meats & Proteins",short:"🍗 Poultry",name:"🍗 Poultry (Chicken & Turkey)",desc:"The #1 source of foodborne illness outbreaks in the U.S. Always assume raw poultry is contaminated.",
+    safeTemp:"165°F",safeTempC:"74°C",tempNote:"Whole cuts, ground, and all preparations — no exceptions",
+    rules:[
+      {icon:"🧼",text:"<strong>Wash hands</strong> for 20 seconds after touching raw poultry. Don't rinse the bird — it splashes bacteria."},
+      {icon:"🔪",text:"<strong>Dedicated cutting board</strong> for raw poultry. Wash board, knife, and counter with hot soapy water immediately after."},
+      {icon:"🌡️",text:"<strong>Use a meat thermometer.</strong> Color is not a reliable indicator — pink chicken can be safe, white chicken can be undercooked."},
+      {icon:"❄️",text:"<strong>Thaw in the fridge</strong> (24 hrs per 5 lbs), not on the counter. Cold water thaw works too — change water every 30 min."},
+    ],
+    pathogens:["salmonella","campylobacter","clostridium","listeria"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"cooling",label:"🧊 Storage: 3–4 days fridge"}]
+  },
+  {cat:"Meats & Proteins",short:"🥩 Ground Beef",name:"🥩 Ground Beef & Burgers",desc:"Grinding mixes surface bacteria throughout the meat — that's why burgers need higher temps than steaks.",
+    safeTemp:"160°F",safeTempC:"71°C",tempNote:"Ground beef, pork, lamb, and veal — no pink center",
+    rules:[
+      {icon:"🌡️",text:"<strong>Always 160°F internal.</strong> Unlike steaks, you can't serve ground meat medium-rare safely — bacteria are mixed throughout."},
+      {icon:"🧊",text:"<strong>Refrigerate within 2 hours.</strong> Ground meat spoils faster than whole cuts due to greater surface area."},
+      {icon:"📦",text:"<strong>Store on the bottom shelf</strong> of the fridge to prevent juices from dripping onto other food."},
+    ],
+    pathogens:["ecoli","salmonella","clostridium","listeria"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"cooling",label:"🧊 Storage: 3–4 days fridge"}]
+  },
+  {cat:"Meats & Proteins",short:"🐷 Pork",name:"🐷 Pork",desc:"Modern pork is much safer than decades ago, but still needs proper cooking — especially for parasites.",
+    safeTemp:"145°F",safeTempC:"63°C",tempNote:"Whole cuts (chops, roasts) with a 3-minute rest. Ground pork: 160°F",
+    rules:[
+      {icon:"⏱️",text:"<strong>3-minute rest</strong> after reaching 145°F — carryover heat finishes the job for whole cuts."},
+      {icon:"🧊",text:"<strong>Freezing kills parasites:</strong> −4°F for 7 days eliminates Trichinella and Toxoplasma. See the Freeze tab."},
+      {icon:"🌡️",text:"<strong>Ground pork needs 160°F</strong> — same as ground beef. No rest time needed at that temp."},
+    ],
+    pathogens:["salmonella","clostridium","toxoplasma","ecoli"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"freeze",label:"❄️ Freeze kill times"}]
+  },
+  {cat:"Meats & Proteins",short:"🥚 Eggs",name:"🥚 Eggs",desc:"Salmonella can live inside the egg — not just on the shell. Pasteurized eggs eliminate this risk entirely.",
+    safeTemp:"160°F",safeTempC:"71°C",tempNote:"Until both yolk and white are firm. No runny yolks for high-risk groups",
+    rules:[
+      {icon:"🛒",text:"<strong>Buy refrigerated eggs</strong> and keep them cold. Don't use eggs with cracked shells."},
+      {icon:"👶",text:"<strong>High-risk groups</strong> (young children, elderly, pregnant, immunocompromised) should avoid runny eggs and raw-egg dishes."},
+      {icon:"✅",text:"<strong>Pasteurized eggs</strong> are safe for raw preparations — Caesar dressing, homemade mayo, cookie dough."},
+    ],
+    pathogens:["salmonella"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"cooling",label:"🧊 Storage: 3–4 days (cooked)"}]
+  },
+  {cat:"Seafood",short:"🦪 Shellfish",name:"🦪 Shellfish (Oysters, Clams, Mussels)",desc:"Filter feeders concentrate pathogens from the water. Raw oysters are among the riskiest foods you can eat.",
+    safeTemp:"145°F",safeTempC:"63°C",tempNote:"Cook until shells open. Discard any that don't open",
+    rules:[
+      {icon:"⚠️",text:"<strong>Raw oysters carry real risk</strong> — especially Vibrio, which can be life-threatening for people with liver conditions."},
+      {icon:"🧊",text:"<strong>Keep shellfish alive until cooking.</strong> Store in fridge, not in water or airtight containers. Use within 2 days."},
+      {icon:"🌊",text:"<strong>Know the source.</strong> Buy from reputable sellers. Harvesting areas are monitored, but warm-water months increase Vibrio risk."},
+    ],
+    pathogens:["vibrio","norovirus","hepatitisA","salmonella"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"}]
+  },
+  {cat:"Seafood",short:"🐟 Fish",name:"🐟 Fish (Raw & Smoked)",desc:"Raw preparations (sushi, ceviche) and cold-smoked fish carry distinct risks from cooked fish.",
+    safeTemp:"145°F",safeTempC:"63°C",tempNote:"Until flesh is opaque and flakes easily. Sushi-grade fish must be pre-frozen",
+    rules:[
+      {icon:"❄️",text:"<strong>Sushi-grade = previously frozen</strong> to kill parasites. FDA requires −4°F for 7 days or −31°F for 15 hours."},
+      {icon:"🧊",text:"<strong>Smoked salmon (lox)</strong> is a Listeria risk. Keep refrigerated and use within the sell-by date. Pregnant women should avoid it."},
+      {icon:"🐟",text:"<strong>Fresh fish should smell like the ocean</strong> — not fishy. Use within 1–2 days of purchase or freeze immediately."},
+    ],
+    pathogens:["vibrio","listeria","norovirus","hepatitisA"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"freeze",label:"❄️ Freeze kill times (parasites)"}]
+  },
+  {cat:"Produce",short:"🥬 Leafy Greens",name:"🥬 Leafy Greens (Lettuce, Spinach)",desc:"No cooking step means no kill step. Contamination happens in the field from water, soil, or animals.",
+    safeTemp:"N/A",safeTempC:"N/A",tempNote:"Usually eaten raw — washing reduces but doesn't eliminate pathogens",
+    rules:[
+      {icon:"🚿",text:"<strong>Wash thoroughly</strong> under running water. Don't soak — that can spread contamination. Pat dry."},
+      {icon:"📋",text:"<strong>Watch for recalls.</strong> Leafy greens are one of the most-recalled produce items. Check FDA.gov during outbreaks."},
+      {icon:"🧊",text:"<strong>Keep at 40°F or below.</strong> Refrigerate within 2 hours of cutting or buying. Use pre-washed bags within the date."},
+      {icon:"🤰",text:"<strong>High-risk groups</strong> should be especially cautious with pre-bagged salads and raw sprouts."},
+    ],
+    pathogens:["ecoli","salmonella","norovirus","cyclospora","listeria"],
+    crosslinks:[{tab:"danger",label:"⏱️ Danger zone timing"},{tab:"cooling",label:"🧊 Storage: 1–2 days (dressed)"}]
+  },
+  {cat:"Produce",short:"🍓 Fruits & Berries",name:"🍓 Fresh Fruits & Berries",desc:"Imported berries and pre-cut fruit are higher risk. Washing helps but can't guarantee safety.",
+    safeTemp:"N/A",safeTempC:"N/A",tempNote:"Eaten raw — wash just before eating, not before storing",
+    rules:[
+      {icon:"🚿",text:"<strong>Wash just before eating</strong> — moisture before storage accelerates mold and bacteria growth."},
+      {icon:"🫐",text:"<strong>Toss moldy berries</strong> and anything touching them. Mold spores spread to neighbors quickly."},
+      {icon:"✂️",text:"<strong>Pre-cut fruit is higher risk.</strong> Refrigerate immediately and use within 3–4 days. Keep at 40°F or below."},
+    ],
+    pathogens:["cyclospora","norovirus","hepatitisA","salmonella"],
+    crosslinks:[{tab:"danger",label:"⏱️ Danger zone timing"}]
+  },
+  {cat:"Produce",short:"🌱 Sprouts",name:"🌱 Raw Sprouts (Alfalfa, Bean, Clover)",desc:"Seeds sprout in warm, humid conditions — the exact environment bacteria thrive in. CDC recommends cooking.",
+    safeTemp:"Cook",safeTempC:"Cook",tempNote:"CDC advises cooking sprouts thoroughly, especially for high-risk groups",
+    rules:[
+      {icon:"⚠️",text:"<strong>Raw sprouts are high-risk.</strong> The warm, moist growing conditions are ideal for Salmonella and E. coli."},
+      {icon:"👶",text:"<strong>Children, elderly, pregnant, and immunocompromised</strong> should avoid raw sprouts entirely."},
+      {icon:"🍳",text:"<strong>Cooking eliminates the risk.</strong> Stir-frying, steaming, or adding to soups makes them safe."},
+    ],
+    pathogens:["salmonella","ecoli","listeria"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"}]
+  },
+  {cat:"Dairy",short:"🥛 Raw Milk",name:"🥛 Unpasteurized Milk & Juice",desc:"Pasteurization exists for a reason — it's one of the most effective food safety interventions ever developed.",
+    safeTemp:"Pasteurize",safeTempC:"Pasteurize",tempNote:"Buy pasteurized. Unpasteurized products carry significant risk",
+    rules:[
+      {icon:"⚠️",text:"<strong>Raw milk is one of the riskiest foods.</strong> It can carry Campylobacter, Salmonella, E. coli, and Listeria simultaneously."},
+      {icon:"🚫",text:"<strong>\"Raw\" does not mean \"natural and safe.\"</strong> Pasteurization doesn't reduce nutrition — it eliminates dangerous pathogens."},
+      {icon:"🧃",text:"<strong>Same applies to fresh-pressed juice</strong> — unpasteurized cider and juice have caused serious outbreaks, especially in children."},
+    ],
+    pathogens:["campylobacter","salmonella","ecoli","listeria"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"}]
+  },
+  {cat:"Dairy",short:"🧀 Soft Cheese",name:"🧀 Soft Cheese (Brie, Queso Fresco)",desc:"Listeria grows at fridge temperatures, making soft cheese uniquely dangerous — especially for pregnant women.",
+    safeTemp:"N/A",safeTempC:"N/A",tempNote:"Buy pasteurized. Check labels on imported and artisan cheeses",
+    rules:[
+      {icon:"🏷️",text:"<strong>Check the label</strong> — it must say \"made with pasteurized milk.\" Imported soft cheeses may not be."},
+      {icon:"🤰",text:"<strong>Pregnant women should avoid</strong> soft cheeses like brie, camembert, queso fresco, and blue cheese unless confirmed pasteurized."},
+      {icon:"🧊",text:"<strong>Listeria grows in the fridge.</strong> Unlike most bacteria, cold doesn't stop it — just slows it. Use soft cheese by the sell-by date."},
+    ],
+    pathogens:["listeria","salmonella"],
+    crosslinks:[{tab:"cooling",label:"🧊 Storage: 1–2 weeks (soft)"}]
+  },
+  {cat:"Deli & Ready-to-Eat",short:"🥪 Deli Meats",name:"🥪 Deli Meats & Hot Dogs",desc:"Ready-to-eat with no further cooking step. Listeria contamination can happen after processing at the deli.",
+    safeTemp:"165°F",safeTempC:"74°C",tempNote:"Reheat deli meats until steaming hot to kill Listeria",
+    rules:[
+      {icon:"🌡️",text:"<strong>Reheat to steaming (165°F)</strong> before eating — this is the only way to kill Listeria that may have grown during storage."},
+      {icon:"📅",text:"<strong>Use within 3–5 days</strong> of opening, regardless of the sell-by date. Pre-sliced deli meat is higher risk than whole pieces."},
+      {icon:"🤰",text:"<strong>Pregnant women</strong> should always heat deli meats before eating — Listeria can cause miscarriage and stillbirth."},
+    ],
+    pathogens:["listeria","salmonella","clostridium"],
+    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"cooling",label:"🧊 Storage: 3–5 days fridge"}]
+  },
 ];
 
 let currentPathogenFood = 0;
@@ -832,69 +920,75 @@ function drawPathogen(){
   document.getElementById("dangerTimeSlider").style.display="none";
   document.getElementById("coolingContent").style.display="none";
   document.getElementById("pathogenContent").style.display="block";
-  buildPathogenLookup();
-  document.getElementById("chartLabel").innerHTML=`<span>Pathogen Reference</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
+  buildFoodSafetyRef();
+  document.getElementById("chartLabel").innerHTML=`<span>Food Safety Reference</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
 }
 
-function buildPathogenLookup(){
+function buildFoodSafetyRef(){
   const cc=document.getElementById("pathogenContent");
-  const f=FOOD_PATHOGEN_MAP[currentPathogenFood];
+  const f=FOOD_SAFETY_REF[currentPathogenFood];
 
   let html="";
   let lastCat="";
-  FOOD_PATHOGEN_MAP.forEach((fd,i)=>{
+  FOOD_SAFETY_REF.forEach((fd,i)=>{
     if(fd.cat!==lastCat){
       if(lastCat) html+=`</div>`;
       html+=`<div class="lookup-cat-label">${fd.cat}</div><div class="lookup-tabs">`;
       lastCat=fd.cat;
     }
-    html+=`<button class="${i===currentPathogenFood?'active':''}" onclick="currentPathogenFood=${i};buildPathogenLookup()">${fd.short}</button>`;
+    html+=`<button class="${i===currentPathogenFood?'active':''}" onclick="currentPathogenFood=${i};buildFoodSafetyRef()">${fd.short}</button>`;
   });
   html+=`</div>`;
 
-  html+=`<div class="pathogen-card">
-    <div class="food-name">${f.name}</div>
-    <div class="food-desc">${f.desc}</div>`;
+  // Safe temp badge
+  const isTemp=f.safeTemp!=="N/A"&&f.safeTemp!=="Cook"&&f.safeTemp!=="Pasteurize";
+  const tempDisplay=isTemp?(unit==="C"?f.safeTempC:f.safeTemp):f.safeTemp;
 
-  f.pathogens.forEach((p,idx)=>{
-    const info=PATHOGEN_INFO[p.id];
-    const lClass=p.likelihood==="Very Common"?"likelihood-high":p.likelihood==="Common"?"likelihood-med":"likelihood-low";
-    html+=`<div class="pathogen-row" id="prow${idx}">
-      <div class="pathogen-row-header" onclick="togglePathogenRow(${idx})">
-        <span class="pathogen-dot" style="background:${info.color}"></span>
-        <span class="pathogen-name">${info.name}</span>
-        <span class="pathogen-likelihood ${lClass}">${p.likelihood}</span>
-        <span class="pathogen-expand">▼</span>
-      </div>
-      <div class="pathogen-detail">
-        <div class="pathogen-detail-grid">
-          <div class="pathogen-detail-item">
-            <div class="pdi-label">⏳ Incubation</div>
-            <div class="pdi-value">${info.incubation}</div>
-          </div>
-          <div class="pathogen-detail-item">
-            <div class="pdi-label">⏱ Duration</div>
-            <div class="pdi-value">${info.duration}</div>
-          </div>
-          <div class="pathogen-detail-item pathogen-symptoms">
-            <div class="pdi-label">🤒 Symptoms</div>
-            <div class="pdi-value">${info.symptoms}</div>
-          </div>
-          <div class="pathogen-risk">
-            <div class="pdi-label">⚠️ High-Risk Groups</div>
-            <div class="pdi-value">${info.risk}</div>
-          </div>
-        </div>
-      </div>
+  html+=`<div class="ref-card">
+    <div class="food-name">${f.name}</div>
+    <div class="food-desc">${f.desc}</div>
+    <div class="ref-safe-temp">
+      <span class="rst-icon">🌡️</span>
+      <span class="rst-temp">${tempDisplay}</span>
+      <span class="rst-label"><strong>Safe Internal Temperature</strong><br>${f.tempNote}</span>
+    </div>
+    <ul class="ref-rules">`;
+
+  f.rules.forEach(r=>{
+    html+=`<li><span class="rule-icon">${r.icon}</span><span>${r.text}</span></li>`;
+  });
+
+  html+=`</ul>`;
+
+  // Cross-links to other tabs
+  html+=`<div class="ref-crosslinks">`;
+  f.crosslinks.forEach(cl=>{
+    html+=`<button class="ref-crosslink" onclick="setTab('${cl.tab}')">${cl.label}</button>`;
+  });
+  html+=`</div>`;
+
+  // Collapsible pathogen list
+  html+=`<button class="ref-pathogen-toggle" id="refPathToggle" onclick="toggleRefPathogens()">
+    🦠 Common pathogens associated with this food
+    <span class="arrow">▼</span>
+  </button>
+  <div class="ref-pathogen-body" id="refPathBody">`;
+
+  f.pathogens.forEach(pid=>{
+    const p=PATHOGEN_NAMES[pid];
+    html+=`<div class="ref-pathogen-item">
+      <span class="pathogen-dot" style="background:${p.color}"></span>
+      <span class="rp-name">${p.name}</span>
     </div>`;
   });
 
-  html+=`</div>`;
+  html+=`</div></div>`;
   cc.innerHTML=html;
 }
 
-function togglePathogenRow(idx){
-  document.getElementById("prow"+idx).classList.toggle("open");
+function toggleRefPathogens(){
+  document.getElementById("refPathToggle").classList.toggle("open");
+  document.getElementById("refPathBody").classList.toggle("open");
 }
 
 function drawCooling(){
@@ -1027,13 +1121,13 @@ function updateSubtitle(){
     tab==="heat"?`Time required to achieve safe inactivation at a given internal temperature. Click the <strong style="color:#2A9D8F">Instant Kill Zone</strong> to zoom in.`:
     tab==="freeze"?`Hold time required to destroy parasites at sub-freezing temperatures. Based on FDA and USDA freeze-destruction guidelines.`:
     tab==="danger"?`Select the temperature your food is being held at, then drag the slider or click the gauge to set how long it's been sitting out. The gauge shows whether your food is <strong style="color:#22C55E">SAFE</strong>, needs to be <strong style="color:#F59E0B">USED NOW</strong>, or should be <strong style="color:#EF4444">DISCARDED</strong> — based on FDA time-and-temperature guidelines.`:
-    tab==="pathogen"?`Select a food to see which pathogens are commonly associated with it. Tap any pathogen for incubation time, symptoms, duration, and high-risk groups.`:
+    tab==="pathogen"?`Select a food to see safe cooking temperatures, key handling rules, and what to watch out for. Tap the pathogen list for details.`:
     `Select a food type to see how long it lasts in the fridge, freezer, and how to reheat it safely. Based on USDA and FDA guidelines.`;
 }
 function updateFootnote(){
   document.getElementById("footnote").textContent=
     tab==="heat"?"* S. aureus toxin, C. botulinum toxin, and bacterial spores require extreme conditions (e.g. pressure canning at 250°F/121°C). This chart applies to vegetative cells only.":
-    tab==="freeze"?"* Some Trichinella strains in wild game (bear, walrus) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
+    tab==="freeze"?"* Some Trichinella strains in wild game (bear, wild boar) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
     tab==="danger"?"* Two official standards exist: the FDA Food Code defines the danger zone as 41°F–135°F (enforced in commercial kitchens), while the USDA uses a wider 40°F–140°F range for consumer education. This tool uses the USDA's more conservative range to provide a greater margin of safety for home use. Growth rates are generalized across common foodborne pathogens (Salmonella, E. coli, Listeria, S. aureus). Actual rates vary by pathogen, food type, moisture, pH, and other factors. The 2-hour rule applies to the total cumulative time in the danger zone, not per-session.":
     tab==="pathogen"?"* Pathogen-food associations and likelihood ratings are based on CDC outbreak surveillance data, FDA recall patterns, and published food microbiology literature. \"Very Common\" = frequently implicated in outbreaks from this food. \"Common\" = regularly found or documented. \"Less Common\" / \"Rare\" = occasional or under specific conditions. Individual risk depends on preparation, sourcing, and handling.":
     "* Storage times are based on USDA and FDA guidelines for food kept at a constant 40°F or below. Quality may decline before safety does — \"use by\" dates refer to quality, not safety. Always refrigerate leftovers within 2 hours of cooking. When in doubt, throw it out.";
@@ -1051,7 +1145,7 @@ function updateInfoBanner(){
     b.innerHTML=`<div class="info-banner"><strong>⚠ The #1 Rule:</strong> Refrigerate leftovers <strong>within 2 hours</strong> of cooking. Use shallow containers for large amounts. Eat or freeze within the storage window shown below.</div>`;
     d.style.display="none";
   } else if(tab==="pathogen"){
-    b.innerHTML=`<div class="info-banner"><strong>ℹ️ How to read this:</strong> Likelihood ratings reflect how often each pathogen is linked to outbreaks from that food. <strong>Tap any pathogen row</strong> to expand details — incubation, symptoms, duration, and who's most at risk.</div>`;
+    b.innerHTML=`<div class="info-banner"><strong>ℹ️ Quick Reference:</strong> Each card shows the <strong>safe internal temperature</strong>, practical handling rules, and links to related tabs. The pathogen list at the bottom is there if you're curious — not to scare you.</div>`;
     d.style.display="none";
   } else {
     b.innerHTML="";
