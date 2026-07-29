@@ -73,8 +73,9 @@
   .legend button:not(.active){opacity:0.45}
   .legend button.toggle-all{font-weight:700;color:var(--text)}
 
-  .info-banner{background:var(--banner-bg);border:1px solid rgba(230,57,70,0.2);border-radius:8px;padding:16px 20px;margin-bottom:12px;font-size:15px;color:var(--text);line-height:1.7}
+  .info-banner{background:#1E1318;border:1px solid #3D2028;border-radius:8px;padding:16px 20px;margin-bottom:12px;font-size:15px;color:#E8E8EC;line-height:1.7}
   .info-banner strong{color:#E63946;font-size:16px}
+  .light .info-banner{background:#FDF2F2;color:#2D2D3A;border-color:#E8C4C4}
 
   .zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px}
   .zone-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:background 0.3s}
@@ -100,9 +101,10 @@
   .footnote{font-size:13px;color:var(--text2);margin-top:16px;line-height:1.7;opacity:1}
 
   /* Disclaimer */
-  .disclaimer{margin-top:20px;padding:16px 20px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;font-size:13px;color:var(--text2);line-height:1.7}
+  .disclaimer{margin-top:20px;padding:16px 20px;background:#171510;border:1px solid #332E1E;border-radius:10px;font-size:13px;color:#B0B2BC;line-height:1.7}
   .disclaimer strong{color:#F59E0B;font-size:13px}
   .disclaimer .disc-title{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:14px;font-weight:700;color:#F59E0B}
+  .light .disclaimer{background:#FFFDF5;color:#4A4C58;border-color:#E8DFC0}
 
   /* Splash modal */
   .splash-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)}
@@ -165,6 +167,124 @@
   .batch-body{display:none;background:var(--bg);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.6}
   .batch-body.open{display:block}
   .batch-body strong{color:var(--text)}
+
+  /* Pathogen Reference tab */
+  .pathogen-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:background 0.3s}
+  .pathogen-card .food-name{font-size:20px;font-weight:800;margin-bottom:4px}
+  .pathogen-card .food-desc{font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.5}
+  .pathogen-row{border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:all 0.2s}
+  .pathogen-row:last-child{margin-bottom:0}
+  .pathogen-row-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;transition:background 0.15s}
+  .pathogen-row-header:hover{background:rgba(255,255,255,0.03)}
+  .light .pathogen-row-header:hover{background:rgba(0,0,0,0.02)}
+  .pathogen-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .pathogen-name{font-size:13px;font-weight:600;color:var(--text);flex:1}
+  .pathogen-likelihood{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:3px 8px;border-radius:4px;flex-shrink:0}
+  .likelihood-high{background:rgba(230,57,70,0.15);color:#E63946}
+  .likelihood-med{background:rgba(245,158,11,0.15);color:#F59E0B}
+  .likelihood-low{background:rgba(59,130,246,0.15);color:#3B82F6}
+  .pathogen-expand{color:var(--text3);font-size:14px;transition:transform 0.2s;flex-shrink:0}
+  .pathogen-row.open .pathogen-expand{transform:rotate(180deg)}
+  .pathogen-detail{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+  .pathogen-row.open .pathogen-detail{display:block}
+  .pathogen-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .pathogen-detail-item{padding:10px 12px;border-radius:8px;background:var(--bg)}
+  .pathogen-detail-item .pdi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:3px}
+  .pathogen-detail-item .pdi-value{font-size:12px;font-weight:600;color:var(--text);line-height:1.4}
+  .pathogen-symptoms{grid-column:1/-1}
+  .pathogen-risk{grid-column:1/-1;padding:10px 12px;border-radius:8px;background:rgba(230,57,70,0.06);border:1px solid rgba(230,57,70,0.12)}
+  .pathogen-risk .pdi-label{color:#E63946}
+  .pathogen-risk .pdi-value{font-size:12px;color:var(--text2)}
+
+  /* ─── MOBILE RESPONSIVE ─── */
+  @media(max-width:680px){
+    body{padding:16px 12px}
+    .container{max-width:100%}
+    .header{flex-direction:column;gap:8px;margin-bottom:8px}
+    h1{font-size:20px}
+    .subtitle{font-size:12px;margin-bottom:14px}
+
+    /* Tabs: horizontal scroll */
+    .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:3px;margin-bottom:12px;padding-bottom:2px;flex-wrap:nowrap}
+    .tabs::-webkit-scrollbar{display:none}
+    .tabs button{padding:8px 12px;font-size:11px;white-space:nowrap;flex-shrink:0}
+    .tab-icon{margin-right:4px;font-size:12px}
+
+    /* Chart */
+    .chart-container{padding:12px 8px 10px;border-radius:0 10px 10px 10px}
+    .chart-label{font-size:9px;flex-wrap:wrap;gap:4px}
+    .mode-tag{font-size:8px}
+    .back-hint{font-size:10px}
+
+    /* Tooltip — below chart on mobile */
+    .tooltip{position:relative;top:auto;bottom:auto;right:auto;left:auto;min-width:auto;border-radius:8px;padding:10px 12px;font-size:11px;margin-top:8px;display:none;opacity:1;pointer-events:auto;backdrop-filter:none}
+    .tooltip.visible{display:block;opacity:1}
+    .tooltip .temp-label{font-size:14px;margin-bottom:6px}
+    .tooltip .row .name{font-size:10px}
+    .tooltip .row .value{font-size:11px}
+
+    /* Legend */
+    .legend{gap:4px}
+    .legend button{padding:4px 8px;font-size:10px}
+    .legend button .ldot{width:6px;height:6px}
+
+    /* Info banner */
+    .info-banner{padding:12px 14px;font-size:13px;line-height:1.5}
+    .info-banner strong{font-size:14px}
+
+    /* Zone cards — single column */
+    .zones{grid-template-columns:1fr;gap:8px}
+    .zone-card .zt{font-size:12px}
+    .zone-card .zd{font-size:11px}
+
+    /* Footnote */
+    .footnote{font-size:11px;line-height:1.6}
+
+    /* Danger gauge controls */
+    .temp-select{padding:6px 4px 10px;gap:5px}
+    .temp-select button{padding:7px 10px;font-size:11px;border-radius:6px}
+    .gauge-slider-wrap{padding:4px 16px 6px}
+    .gauge-slider-wrap label{font-size:13px}
+    .gauge-slider-wrap label strong{font-size:15px}
+    .gauge-hour-marks{padding:0 16px}
+    .gauge-hour-marks span{font-size:11px}
+
+    /* Leftover storage */
+    .lookup-tabs{gap:4px}
+    .lookup-tabs button{padding:6px 10px;font-size:11px}
+    .lookup-cat-label{font-size:9px;margin-top:8px;margin-bottom:4px}
+    .lookup-card{padding:14px 16px}
+    .lookup-card .food-name{font-size:17px;gap:8px;margin-bottom:10px}
+    .lookup-grid{grid-template-columns:1fr;gap:8px}
+    .lookup-item .li-value{font-size:17px}
+    .lookup-reheat{font-size:12px;padding:8px 12px}
+
+    /* Disclaimer & splash */
+    .disclaimer{padding:12px 14px;font-size:12px}
+    .splash-box{padding:20px 18px 16px}
+    .splash-box .disc-title{font-size:14px}
+    .splash-box p{font-size:13px}
+
+    /* Sources */
+    .sources-toggle{padding:12px 14px;font-size:12px}
+    .sources-body{padding:12px 14px}
+    .source-item{font-size:11px}
+
+    /* Pathogen reference */
+    .pathogen-card{padding:14px 16px}
+    .pathogen-card .food-name{font-size:17px}
+    .pathogen-detail-grid{grid-template-columns:1fr}
+    .pathogen-name{font-size:12px}
+    .pathogen-row-header{padding:10px 12px;gap:8px}
+  }
+
+  @media(max-width:400px){
+    body{padding:12px 8px}
+    h1{font-size:18px}
+    .tabs button{padding:7px 10px;font-size:10px}
+    .temp-select button{padding:6px 8px;font-size:10px}
+    .lookup-grid{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
@@ -185,7 +305,8 @@
     <button class="active" onclick="setTab('heat')"><span class="tab-icon">🔥</span>Heat Inactivation</button>
     <button onclick="setTab('freeze')"><span class="tab-icon">❄️</span>Freeze Inactivation</button>
     <button onclick="setTab('danger')"><span class="tab-icon">⏱️</span>Holding / Danger Zone</button>
-    <button onclick="setTab('cooling')"><span class="tab-icon">🌡️</span>Cooling & Reheating</button>
+    <button onclick="setTab('cooling')"><span class="tab-icon">🧊</span>Leftover Storage</button>
+    <button onclick="setTab('pathogen')"><span class="tab-icon">🦠</span>Pathogen Reference</button>
   </div>
 
   <div class="chart-container" id="chartContainer">
@@ -201,6 +322,7 @@
 
   <div id="infoBanner"></div>
   <div id="coolingContent" style="display:none"></div>
+  <div id="pathogenContent" style="display:none"></div>
   <div class="legend" id="legend"></div>
   <div class="zones" id="zones"></div>
   <p class="footnote" id="footnote"></p>
@@ -353,17 +475,32 @@ function makeXSInv(xMin,xMax){return t=>M.l+((xMin-t)/(xMin-xMax))*PW}
 function makeYLin(yMax){return m=>M.t+PH-((Math.min(Math.max(m,0),yMax)/yMax)*PH)}
 function makeYLog(lo,hi){return m=>{const l=Math.log10(Math.max(m,Math.pow(10,lo)));const c=Math.max(lo,Math.min(l,hi));return M.t+PH-((c-lo)/(hi-lo))*PH}}
 
+// ─── TOUCH HELPERS ───
+function getTouchX(e,svg){
+  const touch=e.touches?e.touches[0]:e.changedTouches?e.changedTouches[0]:null;
+  if(!touch)return null;
+  const r=svg.getBoundingClientRect();
+  return((touch.clientX-r.left)/r.width)*W;
+}
+function getTouchXY(e,svg){
+  const touch=e.touches?e.touches[0]:e.changedTouches?e.changedTouches[0]:null;
+  if(!touch)return null;
+  const r=svg.getBoundingClientRect();
+  return{x:((touch.clientX-r.left)/r.width)*W,y:((touch.clientY-r.top)/r.height)*parseFloat(svg.getAttribute("viewBox").split(" ")[3])};
+}
+
 // ─── DRAW ───
 function draw(){
   updateSubtitle();
   const svg=document.getElementById("chart");
-  if(tab!=="cooling"){svg.style.height="";svg.setAttribute("viewBox","0 0 780 460")}
-  if(tab!=="danger"&&tab!=="cooling"){
+  if(tab!=="cooling"&&tab!=="pathogen"){svg.style.height="";svg.setAttribute("viewBox","0 0 780 460")}
+  if(tab!=="danger"&&tab!=="cooling"&&tab!=="pathogen"){
     document.getElementById("dangerTempSelect").style.display="none";
     document.getElementById("dangerTimeSlider").style.display="none";
   }
   if(tab!=="cooling") document.getElementById("coolingContent").style.display="none";
-  if(tab==="heat")drawHeat();else if(tab==="freeze")drawFreeze();else if(tab==="danger")drawDanger();else drawCooling();
+  if(tab!=="pathogen") document.getElementById("pathogenContent").style.display="none";
+  if(tab==="heat")drawHeat();else if(tab==="freeze")drawFreeze();else if(tab==="danger")drawDanger();else if(tab==="pathogen")drawPathogen();else drawCooling();
   buildLegend();buildZones();updateFootnote();updateInfoBanner();
 }
 
@@ -421,6 +558,10 @@ function drawHeat(){
   ov.addEventListener("mousemove",e=>{const r=svg.getBoundingClientRect();const sx=((e.clientX-r.left)/r.width)*W;const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(!isDet&&t>=160&&t<=165)ov.style.cursor="pointer";else ov.style.cursor="crosshair";if(t>=xMin&&t<=xMax){hoverTemp=t;showTip(HEAT_PATHOGENS,heatActive,heatCalc,fmtMin,xS,yS)}else hideTip()});
   ov.addEventListener("mouseleave",()=>{ov.style.cursor="crosshair";hideTip()});
   ov.addEventListener("click",e=>{const r=svg.getBoundingClientRect();const sx=((e.clientX-r.left)/r.width)*W;const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(!isDet&&t>=160&&t<=165){heatMode="detail";draw()}});
+  // Touch support
+  ov.addEventListener("touchstart",e=>{e.preventDefault();const sx=getTouchX(e,svg);if(sx===null)return;const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(t>=xMin&&t<=xMax){hoverTemp=t;showTip(HEAT_PATHOGENS,heatActive,heatCalc,fmtMin,xS,yS)}},{passive:false});
+  ov.addEventListener("touchmove",e=>{e.preventDefault();const sx=getTouchX(e,svg);if(sx===null)return;const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(t>=xMin&&t<=xMax){hoverTemp=t;showTip(HEAT_PATHOGENS,heatActive,heatCalc,fmtMin,xS,yS)}else hideTip()},{passive:false});
+  ov.addEventListener("touchend",e=>{const sx=getTouchX(e,svg);if(sx!==null){const t=Math.round(xMin+((sx-M.l)/PW)*(xMax-xMin));if(!isDet&&t>=160&&t<=165){heatMode="detail";draw();return}}});
   el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"none",stroke:T.grid,"stroke-width":1,rx:2},svg);
 
   const cl=document.getElementById("chartLabel");
@@ -466,6 +607,10 @@ function drawFreeze(){
   const ov=el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"transparent",style:"cursor:crosshair"},svg);
   ov.addEventListener("mousemove",e=>{const r=svg.getBoundingClientRect();const sx=((e.clientX-r.left)/r.width)*W;const t=Math.round(20-((sx-M.l)/PW)*50);if(t<=20&&t>=-30){hoverTemp=t;showTip(FREEZE_PATHOGENS,freezeActive,freezeCalc,fmtHrs,xS,yS)}else hideTip()});
   ov.addEventListener("mouseleave",hideTip);
+  // Touch support
+  ov.addEventListener("touchstart",e=>{e.preventDefault();const sx=getTouchX(e,svg);if(sx===null)return;const t=Math.round(20-((sx-M.l)/PW)*50);if(t<=20&&t>=-30){hoverTemp=t;showTip(FREEZE_PATHOGENS,freezeActive,freezeCalc,fmtHrs,xS,yS)}},{passive:false});
+  ov.addEventListener("touchmove",e=>{e.preventDefault();const sx=getTouchX(e,svg);if(sx===null)return;const t=Math.round(20-((sx-M.l)/PW)*50);if(t<=20&&t>=-30){hoverTemp=t;showTip(FREEZE_PATHOGENS,freezeActive,freezeCalc,fmtHrs,xS,yS)}else hideTip()},{passive:false});
+  ov.addEventListener("touchend",()=>{});
   el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"none",stroke:T.grid,"stroke-width":1,rx:2},svg);
 
   document.getElementById("chartLabel").innerHTML=`<span>Freeze Inactivation</span><span class="mode-tag" style="background:rgba(90,127,196,0.15);color:#5A7FC4">Parasites Only</span>`;
@@ -510,26 +655,33 @@ function drawDanger(){
 
   // Make gauge arc clickable to set time
   svg.style.cursor="pointer";
-  svg.addEventListener("click",function gaugeClick(e){
+  function handleGaugeInteraction(clientX,clientY){
     if(tab!=="danger") return;
     const rect=svg.getBoundingClientRect();
-    const svgX=((e.clientX-rect.left)/rect.width)*W;
-    const svgY=((e.clientY-rect.top)/rect.height)*H;
+    const svgX=((clientX-rect.left)/rect.width)*W;
+    const svgY=((clientY-rect.top)/rect.height)*390;
     const cx=W/2,cy=210;
     const dx=svgX-cx,dy=-(svgY-cy);
-    let angle=Math.atan2(dx,dy)*180/Math.PI; // 0=top, clockwise positive
+    let angle=Math.atan2(dx,dy)*180/Math.PI;
     const HALF=125;
     if(angle<-HALF) angle=-HALF;
     if(angle>HALF) angle=HALF;
     const frac=(angle+HALF)/(HALF*2);
-    const newTime=Math.round(frac*80)/10; // 0-8, step 0.1
+    const newTime=Math.round(frac*80)/10;
     dangerTime=Math.max(0,Math.min(8,newTime));
     const slider=document.getElementById("timeRange");
     if(slider) slider.value=dangerTime;
     const disp=document.getElementById("timeDisplay");
     if(disp) disp.textContent=dangerTime.toFixed(1)+" hours";
     drawGauge(null,getTheme());
-  });
+  }
+  svg.addEventListener("click",function(e){handleGaugeInteraction(e.clientX,e.clientY)});
+  svg.addEventListener("touchstart",function(e){
+    if(tab!=="danger")return;
+    e.preventDefault();
+    const touch=e.touches[0];
+    handleGaugeInteraction(touch.clientX,touch.clientY);
+  },{passive:false});
 
   const isSafeTemp=dangerTemp<=40||dangerTemp>=140;
   document.getElementById("chartLabel").innerHTML=isSafeTemp
@@ -615,6 +767,135 @@ const FOODS = [
 ];
 
 let currentFood = 0;
+
+// ─── PATHOGEN REFERENCE DATA ───
+const PATHOGEN_INFO = {
+  listeria:{name:"Listeria monocytogenes",color:"#E63946",incubation:"1–4 weeks",symptoms:"Fever, muscle aches, nausea, diarrhea. Can cause meningitis and blood infections in severe cases.",duration:"Days to weeks — can be fatal",risk:"Pregnant women (risk of miscarriage), newborns, adults 65+, immunocompromised"},
+  salmonella:{name:"Salmonella spp.",color:"#F4A261",incubation:"6–72 hours",symptoms:"Diarrhea, fever, abdominal cramps, vomiting.",duration:"4–7 days",risk:"Children under 5, adults 65+, immunocompromised"},
+  ecoli:{name:"E. coli O157:H7",color:"#2A9D8F",incubation:"1–10 days (usually 3–4)",symptoms:"Severe bloody diarrhea, intense abdominal cramps, vomiting. Can cause hemolytic uremic syndrome (HUS) — kidney failure.",duration:"5–10 days",risk:"Children under 5 (HUS risk), adults 65+"},
+  cyclospora:{name:"Cyclospora cayetanensis",color:"#5A7FC4",incubation:"1–2 weeks",symptoms:"Watery diarrhea, loss of appetite, weight loss, bloating, fatigue, nausea.",duration:"Weeks to months if untreated",risk:"All ages. Requires prescription treatment (won't resolve on its own)."},
+  norovirus:{name:"Norovirus",color:"#7B68AE",incubation:"12–48 hours",symptoms:"Sudden vomiting, watery diarrhea, nausea, stomach cramps. Extremely contagious.",duration:"1–3 days",risk:"Young children, adults 65+. Spreads rapidly in group settings."},
+  campylobacter:{name:"Campylobacter jejuni",color:"#B07CC6",incubation:"2–5 days",symptoms:"Diarrhea (often bloody), cramping, fever, nausea.",duration:"2–10 days",risk:"Children under 5, young adults. Rare complication: Guillain-Barré syndrome."},
+  hepatitisA:{name:"Hepatitis A virus",color:"#45B7AA",incubation:"15–50 days (avg 28)",symptoms:"Fever, fatigue, nausea, jaundice (yellow skin/eyes), dark urine, abdominal pain.",duration:"Weeks to months",risk:"Unvaccinated individuals. Vaccine is highly effective."},
+  clostridium:{name:"C. perfringens",color:"#8DB255",incubation:"6–24 hours",symptoms:"Watery diarrhea, abdominal cramps. Usually no fever or vomiting.",duration:"~24 hours",risk:"Elderly, young children. Often called 'the cafeteria germ' — thrives in large batches held warm."},
+  toxoplasma:{name:"Toxoplasma gondii",color:"#3D7A44",incubation:"5–23 days",symptoms:"Often no symptoms. Flu-like when symptomatic: swollen lymph nodes, muscle aches, fatigue.",duration:"Weeks to months (organism persists)",risk:"Pregnant women (severe birth defects), immunocompromised (brain infection risk)"},
+  vibrio:{name:"Vibrio vulnificus",color:"#E8A838",incubation:"1–7 days",symptoms:"Watery diarrhea, abdominal cramps, nausea, vomiting, fever. Can cause life-threatening blood infections.",duration:"2–8 days",risk:"Liver disease, alcoholism, immunocompromised. Can be fatal within days."},
+};
+
+const FOOD_PATHOGEN_MAP = [
+  {cat:"Meats & Proteins",short:"🍗 Poultry",name:"🍗 Poultry (Chicken & Turkey)",desc:"The #1 source of Salmonella and Campylobacter outbreaks in the U.S.",pathogens:[
+    {id:"salmonella",likelihood:"Very Common"},{id:"campylobacter",likelihood:"Very Common"},{id:"clostridium",likelihood:"Common"},{id:"listeria",likelihood:"Less Common"}
+  ]},
+  {cat:"Meats & Proteins",short:"🥩 Ground Beef",name:"🥩 Ground Beef",desc:"Grinding mixes surface bacteria throughout the meat. Always cook to 155°F+.",pathogens:[
+    {id:"ecoli",likelihood:"Common"},{id:"salmonella",likelihood:"Common"},{id:"clostridium",likelihood:"Common"},{id:"listeria",likelihood:"Less Common"}
+  ]},
+  {cat:"Meats & Proteins",short:"🐷 Pork",name:"🐷 Pork",desc:"Historically associated with parasites, now more commonly linked to bacterial contamination.",pathogens:[
+    {id:"salmonella",likelihood:"Common"},{id:"clostridium",likelihood:"Common"},{id:"toxoplasma",likelihood:"Less Common"},{id:"ecoli",likelihood:"Less Common"}
+  ]},
+  {cat:"Meats & Proteins",short:"🥚 Eggs",name:"🥚 Eggs",desc:"Salmonella can be inside the egg — not just on the shell. Pasteurized eggs eliminate risk.",pathogens:[
+    {id:"salmonella",likelihood:"Very Common"},{id:"listeria",likelihood:"Rare"}
+  ]},
+  {cat:"Seafood",short:"🦪 Shellfish",name:"🦪 Shellfish (Oysters, Clams, Mussels)",desc:"Filter feeders concentrate pathogens from the water. Raw oysters are especially risky.",pathogens:[
+    {id:"vibrio",likelihood:"Very Common"},{id:"norovirus",likelihood:"Common"},{id:"hepatitisA",likelihood:"Less Common"},{id:"salmonella",likelihood:"Less Common"}
+  ]},
+  {cat:"Seafood",short:"🐟 Fish",name:"🐟 Fish (Raw & Smoked)",desc:"Raw preparations (sushi, ceviche) and cold-smoked fish carry distinct risks.",pathogens:[
+    {id:"vibrio",likelihood:"Common"},{id:"listeria",likelihood:"Common"},{id:"norovirus",likelihood:"Less Common"},{id:"hepatitisA",likelihood:"Less Common"}
+  ]},
+  {cat:"Produce",short:"🥬 Leafy Greens",name:"🥬 Leafy Greens (Lettuce, Spinach)",desc:"Eaten raw, so no kill step. Contamination happens in the field from water or soil.",pathogens:[
+    {id:"ecoli",likelihood:"Common"},{id:"salmonella",likelihood:"Common"},{id:"norovirus",likelihood:"Common"},{id:"cyclospora",likelihood:"Less Common"},{id:"listeria",likelihood:"Less Common"}
+  ]},
+  {cat:"Produce",short:"🍓 Fruits & Berries",name:"🍓 Fresh Fruits & Berries",desc:"Imported berries and pre-cut fruit are higher risk. Washing reduces but doesn't eliminate pathogens.",pathogens:[
+    {id:"cyclospora",likelihood:"Common"},{id:"norovirus",likelihood:"Common"},{id:"hepatitisA",likelihood:"Less Common"},{id:"salmonella",likelihood:"Less Common"}
+  ]},
+  {cat:"Produce",short:"🌱 Sprouts",name:"🌱 Raw Sprouts (Alfalfa, Bean)",desc:"Seeds sprout in warm, humid conditions — ideal for bacterial growth. CDC advises cooking sprouts.",pathogens:[
+    {id:"salmonella",likelihood:"Very Common"},{id:"ecoli",likelihood:"Common"},{id:"listeria",likelihood:"Less Common"}
+  ]},
+  {cat:"Dairy",short:"🥛 Raw Milk",name:"🥛 Unpasteurized Milk & Juice",desc:"Pasteurization exists for a reason. Raw dairy is one of the riskiest food categories.",pathogens:[
+    {id:"campylobacter",likelihood:"Very Common"},{id:"salmonella",likelihood:"Common"},{id:"ecoli",likelihood:"Common"},{id:"listeria",likelihood:"Common"}
+  ]},
+  {cat:"Dairy",short:"🧀 Soft Cheese",name:"🧀 Soft Cheese (Brie, Queso Fresco)",desc:"Listeria grows even at refrigerator temperatures, making soft cheese uniquely dangerous.",pathogens:[
+    {id:"listeria",likelihood:"Very Common"},{id:"salmonella",likelihood:"Less Common"},{id:"ecoli",likelihood:"Rare"}
+  ]},
+  {cat:"Deli & Ready-to-Eat",short:"🥪 Deli Meats",name:"🥪 Deli Meats & Hot Dogs",desc:"Ready-to-eat with no further cooking step. Listeria contamination can happen after processing.",pathogens:[
+    {id:"listeria",likelihood:"Very Common"},{id:"salmonella",likelihood:"Less Common"},{id:"clostridium",likelihood:"Less Common"}
+  ]},
+];
+
+let currentPathogenFood = 0;
+
+function drawPathogen(){
+  const svg=document.getElementById("chart");svg.innerHTML="";
+  hideTip();
+  svg.setAttribute("viewBox","0 0 780 0");
+  svg.style.height="0";
+  document.getElementById("dangerTempSelect").style.display="none";
+  document.getElementById("dangerTimeSlider").style.display="none";
+  document.getElementById("coolingContent").style.display="none";
+  document.getElementById("pathogenContent").style.display="block";
+  buildPathogenLookup();
+  document.getElementById("chartLabel").innerHTML=`<span>Pathogen Reference</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
+}
+
+function buildPathogenLookup(){
+  const cc=document.getElementById("pathogenContent");
+  const f=FOOD_PATHOGEN_MAP[currentPathogenFood];
+
+  let html="";
+  let lastCat="";
+  FOOD_PATHOGEN_MAP.forEach((fd,i)=>{
+    if(fd.cat!==lastCat){
+      if(lastCat) html+=`</div>`;
+      html+=`<div class="lookup-cat-label">${fd.cat}</div><div class="lookup-tabs">`;
+      lastCat=fd.cat;
+    }
+    html+=`<button class="${i===currentPathogenFood?'active':''}" onclick="currentPathogenFood=${i};buildPathogenLookup()">${fd.short}</button>`;
+  });
+  html+=`</div>`;
+
+  html+=`<div class="pathogen-card">
+    <div class="food-name">${f.name}</div>
+    <div class="food-desc">${f.desc}</div>`;
+
+  f.pathogens.forEach((p,idx)=>{
+    const info=PATHOGEN_INFO[p.id];
+    const lClass=p.likelihood==="Very Common"?"likelihood-high":p.likelihood==="Common"?"likelihood-med":"likelihood-low";
+    html+=`<div class="pathogen-row" id="prow${idx}">
+      <div class="pathogen-row-header" onclick="togglePathogenRow(${idx})">
+        <span class="pathogen-dot" style="background:${info.color}"></span>
+        <span class="pathogen-name">${info.name}</span>
+        <span class="pathogen-likelihood ${lClass}">${p.likelihood}</span>
+        <span class="pathogen-expand">▼</span>
+      </div>
+      <div class="pathogen-detail">
+        <div class="pathogen-detail-grid">
+          <div class="pathogen-detail-item">
+            <div class="pdi-label">⏳ Incubation</div>
+            <div class="pdi-value">${info.incubation}</div>
+          </div>
+          <div class="pathogen-detail-item">
+            <div class="pdi-label">⏱ Duration</div>
+            <div class="pdi-value">${info.duration}</div>
+          </div>
+          <div class="pathogen-detail-item pathogen-symptoms">
+            <div class="pdi-label">🤒 Symptoms</div>
+            <div class="pdi-value">${info.symptoms}</div>
+          </div>
+          <div class="pathogen-risk">
+            <div class="pdi-label">⚠️ High-Risk Groups</div>
+            <div class="pdi-value">${info.risk}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  html+=`</div>`;
+  cc.innerHTML=html;
+}
+
+function togglePathogenRow(idx){
+  document.getElementById("prow"+idx).classList.toggle("open");
+}
 
 function drawCooling(){
   const svg=document.getElementById("chart");svg.innerHTML="";const T=getTheme();
@@ -710,7 +991,7 @@ function hideTip(){hoverTemp=null;document.getElementById("tooltip").classList.r
 // ─── LEGEND ───
 function buildLegend(){
   const c=document.getElementById("legend");c.innerHTML="";
-  if(tab==="danger"||tab==="cooling"){c.style.display="none";return}
+  if(tab==="danger"||tab==="cooling"||tab==="pathogen"){c.style.display="none";return}
   c.style.display="flex";
   const P=tab==="heat"?HEAT_PATHOGENS:FREEZE_PATHOGENS;
   const A=tab==="heat"?heatActive:freezeActive;
@@ -746,13 +1027,15 @@ function updateSubtitle(){
     tab==="heat"?`Time required to achieve safe inactivation at a given internal temperature. Click the <strong style="color:#2A9D8F">Instant Kill Zone</strong> to zoom in.`:
     tab==="freeze"?`Hold time required to destroy parasites at sub-freezing temperatures. Based on FDA and USDA freeze-destruction guidelines.`:
     tab==="danger"?`Select the temperature your food is being held at, then drag the slider or click the gauge to set how long it's been sitting out. The gauge shows whether your food is <strong style="color:#22C55E">SAFE</strong>, needs to be <strong style="color:#F59E0B">USED NOW</strong>, or should be <strong style="color:#EF4444">DISCARDED</strong> — based on FDA time-and-temperature guidelines.`:
+    tab==="pathogen"?`Select a food to see which pathogens are commonly associated with it. Tap any pathogen for incubation time, symptoms, duration, and high-risk groups.`:
     `Select a food type to see how long it lasts in the fridge, freezer, and how to reheat it safely. Based on USDA and FDA guidelines.`;
 }
 function updateFootnote(){
   document.getElementById("footnote").textContent=
     tab==="heat"?"* S. aureus toxin, C. botulinum toxin, and bacterial spores require extreme conditions (e.g. pressure canning at 250°F/121°C). This chart applies to vegetative cells only.":
-    tab==="freeze"?"* Some Trichinella strains in wild game (bear, wild boar) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
+    tab==="freeze"?"* Some Trichinella strains in wild game (bear, walrus) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
     tab==="danger"?"* Two official standards exist: the FDA Food Code defines the danger zone as 41°F–135°F (enforced in commercial kitchens), while the USDA uses a wider 40°F–140°F range for consumer education. This tool uses the USDA's more conservative range to provide a greater margin of safety for home use. Growth rates are generalized across common foodborne pathogens (Salmonella, E. coli, Listeria, S. aureus). Actual rates vary by pathogen, food type, moisture, pH, and other factors. The 2-hour rule applies to the total cumulative time in the danger zone, not per-session.":
+    tab==="pathogen"?"* Pathogen-food associations and likelihood ratings are based on CDC outbreak surveillance data, FDA recall patterns, and published food microbiology literature. \"Very Common\" = frequently implicated in outbreaks from this food. \"Common\" = regularly found or documented. \"Less Common\" / \"Rare\" = occasional or under specific conditions. Individual risk depends on preparation, sourcing, and handling.":
     "* Storage times are based on USDA and FDA guidelines for food kept at a constant 40°F or below. Quality may decline before safety does — \"use by\" dates refer to quality, not safety. Always refrigerate leftovers within 2 hours of cooking. When in doubt, throw it out.";
 }
 function updateInfoBanner(){
@@ -766,6 +1049,9 @@ function updateInfoBanner(){
     d.style.display="block";
   } else if(tab==="cooling"){
     b.innerHTML=`<div class="info-banner"><strong>⚠ The #1 Rule:</strong> Refrigerate leftovers <strong>within 2 hours</strong> of cooking. Use shallow containers for large amounts. Eat or freeze within the storage window shown below.</div>`;
+    d.style.display="none";
+  } else if(tab==="pathogen"){
+    b.innerHTML=`<div class="info-banner"><strong>ℹ️ How to read this:</strong> Likelihood ratings reflect how often each pathogen is linked to outbreaks from that food. <strong>Tap any pathogen row</strong> to expand details — incubation, symptoms, duration, and who's most at risk.</div>`;
     d.style.display="none";
   } else {
     b.innerHTML="";
@@ -783,7 +1069,7 @@ function setTab(t){
     return;
   }
   tab=t;hoverTemp=null;hideTip();if(t==="heat")heatMode="overview";
-  document.querySelectorAll("#tabBar button").forEach((b,i)=>b.classList.toggle("active",i===(t==="heat"?0:t==="freeze"?1:t==="danger"?2:3)));
+  document.querySelectorAll("#tabBar button").forEach((b,i)=>b.classList.toggle("active",i===(t==="heat"?0:t==="freeze"?1:t==="danger"?2:t==="cooling"?3:4)));
   draw();
 }
 function dismissSplash(){
