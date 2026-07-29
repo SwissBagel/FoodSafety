@@ -24,7 +24,7 @@ A quick-reference lookup for 18 food types organized into four categories: Cooke
 
 ## Design Decisions
 
-The tool went through 24 iterations to get here. Some of the key pivots:
+The tool went through 30 iterations to get here. Some of the key pivots:
 
 **Log scale vs. linear for heat inactivation.** The original Gemini-generated chart used a log scale, which made every pathogen look like a gentle slope. Switching to a linear y-axis revealed the dramatic exponential decay — but crushed all the detail below 5 minutes into an invisible band. The solution: a linear overview with a click-to-zoom log detail view for the instant kill zone.
 
