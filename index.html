@@ -846,10 +846,12 @@ const FOODS = [
   {cat:"Cooked Meats & Proteins",short:"🐟 Fish",name:"🐟 Cooked Fish & Seafood",fridge:"2–3 days",freezer:"3–6 months",reheat:"165°F — reheat gently",tip:"Fish spoils faster than meat. Prioritize eating within 2 days for safety and quality."},
   {cat:"Cooked Meats & Proteins",short:"🥚 Eggs",name:"🥚 Hard-Boiled Eggs",fridge:"7 days (in shell)",freezer:"Don't freeze",reheat:"N/A",tip:"Keep in shell until ready to eat. Peeled eggs dry out faster and spoil sooner."},
   {cat:"Cooked Meats & Proteins",short:"🍳 Scrambled Eggs",name:"🍳 Scrambled Eggs & Omelets",fridge:"3–4 days",freezer:"Don't freeze",reheat:"165°F — microwave or skillet",tip:"Cooked eggs spoil faster than you'd think. Refrigerate within 2 hours and use within 3–4 days. Texture suffers after freezing."},
-  {cat:"Prepared Dishes",short:"🍲 Soups",name:"🍲 Soups & Stews",fridge:"3–4 days",freezer:"2–3 months",reheat:"Bring to a rolling boil",tip:"Use an ice bath to cool large pots before refrigerating. Divide into smaller containers."},
+  {cat:"Prepared Dishes",short:"🍲 Soups",name:"🍲 Soups, Stews & Beans",fridge:"3–4 days",freezer:"2–3 months",reheat:"Bring to a rolling boil",tip:"Includes canned beans once opened and reheated. Use an ice bath to cool large pots before refrigerating. Divide into smaller containers."},
   {cat:"Prepared Dishes",short:"🍚 Rice & Pasta",name:"🍚 Cooked Rice & Pasta",fridge:"1–2 days",freezer:"1–2 months",reheat:"165°F — steam until hot",tip:"Rice grows Bacillus cereus quickly at room temp. Refrigerate within 1 hour — this is the #1 leftover people get wrong."},
   {cat:"Prepared Dishes",short:"🍕 Pizza",name:"🍕 Pizza",fridge:"3–4 days",freezer:"1–2 months",reheat:"165°F — oven is best",tip:"Store slices flat, not stacked, for even cooling."},
   {cat:"Prepared Dishes",short:"🥔 Potatoes",name:"🥔 Cooked Potatoes",fridge:"3–5 days",freezer:"10–12 months",reheat:"165°F — oven or microwave",tip:"Baked potatoes wrapped in foil are a botulism risk if left at room temp. Unwrap and refrigerate within 2 hours. Mashed potatoes freeze well."},
+  {cat:"Prepared Dishes",short:"🥡 Restaurant",name:"🥡 Restaurant Leftovers & Takeout",fridge:"3–4 days",freezer:"2–3 months (varies by dish)",reheat:"165°F throughout",tip:"The 2-hour danger zone clock starts when the food was first served — not when you got home. A long dinner means you're already 30–60 min in before the doggy bag hits your car. Refrigerate within 2 hours of serving. For mixed dishes, follow the shortest-lived ingredient (seafood > meat > grains)."},
+  {cat:"Prepared Dishes",short:"🥦 Cooked Veggies",name:"🥦 Cooked Vegetables",fridge:"3–5 days",freezer:"10–12 months",reheat:"165°F — microwave or oven",tip:"Lower risk than proteins but still follow the 2-hour rule. Roasted, steamed, or sautéed veggies all store the same. Store in shallow containers — a deep pile of hot broccoli cools slowly in the center."},
   {cat:"Cold & Raw",short:"🥗 Salad",name:"🥗 Salads (with dressing)",fridge:"1–2 days",freezer:"Don't freeze",reheat:"N/A",tip:"Dressed salads wilt fast and can harbor bacteria. Undressed components last 3–5 days stored separately."},
   {cat:"Cold & Raw",short:"🥗 Meat Salad",name:"🥗 Salads (with meat/eggs)",fridge:"1–2 days",freezer:"Don't freeze",reheat:"N/A",tip:"Chicken salad, tuna salad, and egg salad are high-risk. The mayo isn't the problem — it's the protein. Use within 1–2 days."},
   {cat:"Cold & Raw",short:"🍣 Sushi",name:"🍣 Sushi & Raw Fish",fridge:"24 hours max",freezer:"Don't freeze (prepared)",reheat:"N/A",tip:"Sushi is a same-day food. After 24 hours in the fridge, discard regardless of appearance or smell."},
@@ -1219,7 +1221,7 @@ function updateSubtitle(){
 function updateFootnote(){
   document.getElementById("footnote").textContent=
     tab==="heat"?"* S. aureus toxin, C. botulinum toxin, and bacterial spores require extreme conditions (e.g. pressure canning at 250°F/121°C). This chart applies to vegetative cells only.":
-    tab==="freeze"?"* Some Trichinella strains in wild game (bear, walrus) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
+    tab==="freeze"?"* Some Trichinella strains in wild game (bear, wild boar) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
     tab==="danger"?"* Two official standards exist: the FDA Food Code defines the danger zone as 41°F–135°F (enforced in commercial kitchens), while the USDA uses a wider 40°F–140°F range for consumer education. This tool uses the USDA's more conservative range to provide a greater margin of safety for home use. Growth rates are generalized across common foodborne pathogens (Salmonella, E. coli, Listeria, S. aureus). Actual rates vary by pathogen, food type, moisture, pH, and other factors. The 2-hour rule applies to the total cumulative time in the danger zone, not per-session.":
     tab==="pathogen"?"* Pathogen-food associations and likelihood ratings are based on CDC outbreak surveillance data, FDA recall patterns, and published food microbiology literature. \"Very Common\" = frequently implicated in outbreaks from this food. \"Common\" = regularly found or documented. \"Less Common\" / \"Rare\" = occasional or under specific conditions. Individual risk depends on preparation, sourcing, and handling.":
     "* Storage times are based on USDA and FDA guidelines for food kept at a constant 40°F or below. Quality may decline before safety does — \"use by\" dates refer to quality, not safety. Always refrigerate leftovers within 2 hours of cooking. When in doubt, throw it out.";
@@ -1334,7 +1336,7 @@ function printReference(){
     {food:"Cooked Ground Meat",fridge:"3–4 days",freezer:"3–4 months"},
     {food:"Cooked Steaks/Chops",fridge:"3–4 days",freezer:"4–6 months"},
     {food:"Cooked Fish/Seafood",fridge:"2–3 days",freezer:"3–6 months"},
-    {food:"Soups & Stews",fridge:"3–4 days",freezer:"2–3 months"},
+    {food:"Soups, Stews & Beans",fridge:"3–4 days",freezer:"2–3 months"},
     {food:"Cooked Rice & Pasta",fridge:"1–2 days",freezer:"1–2 months"},
     {food:"Deli Meats (opened)",fridge:"3–5 days",freezer:"1–2 months"},
     {food:"Sushi/Raw Fish",fridge:"24 hrs max",freezer:"Don't freeze"},
