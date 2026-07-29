@@ -548,6 +548,8 @@ const heatCalc=(ref,z,t)=>ref*Math.pow(10,-(t-135)/z);
 const freezeCalc=(ref,z,t)=>ref*Math.pow(10,(t-20)/z);
 function fmtMin(m){if(m>=60)return(m/60).toFixed(1)+" hr";if(m>=1)return m.toFixed(1)+" min";const s=m*60;if(s>=1)return s.toFixed(1)+" sec";if(s>=0.001)return(s*1000).toFixed(1)+" ms";return"< 1 ms"}
 function fmtHrs(h){if(h>=48)return(h/24).toFixed(1)+" days";if(h>=1)return h.toFixed(1)+" hrs";const m=h*60;if(m>=1)return m.toFixed(0)+" min";return"< 1 min"}
+function convReheat(s){if(unit==="F")return s;return s.replace(/(\d+)°F/g,(_,d)=>Math.round(fToC(parseInt(d)))+"°C")}
+function convTipTemps(s){if(unit==="F")return s;return s.replace(/(\d+)°F/g,(_,d)=>Math.round(fToC(parseInt(d)))+"°C")}
 
 const NS="http://www.w3.org/2000/svg";
 function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs||{}))e.setAttribute(k,v);if(parent)parent.appendChild(e);return e}
@@ -1044,12 +1046,12 @@ function buildFoodSafetyRef(){
     <div class="ref-safe-temp">
       <span class="rst-icon">🌡️</span>
       <span class="rst-temp">${tempDisplay}</span>
-      <span class="rst-label"><strong>Safe Internal Temperature</strong><br>${f.tempNote}</span>
+      <span class="rst-label"><strong>Safe Internal Temperature</strong><br>${convTipTemps(f.tempNote)}</span>
     </div>
     <ul class="ref-rules">`;
 
   f.rules.forEach(r=>{
-    html+=`<li><span class="rule-icon">${r.icon}</span><span>${r.text}</span></li>`;
+    html+=`<li><span class="rule-icon">${r.icon}</span><span>${convTipTemps(r.text)}</span></li>`;
   });
 
   html+=`</ul>`;
@@ -1122,19 +1124,19 @@ function buildLookup(){
     <div class="food-name">${f.name}</div>
     <div class="lookup-grid">
       <div class="lookup-item" style="background:rgba(59,130,246,0.1)">
-        <div class="li-label" style="color:#3B82F6">Fridge (≤40°F)</div>
+        <div class="li-label" style="color:#3B82F6">Fridge (≤${dispTemp(40)})</div>
         <div class="li-value" style="color:#3B82F6">${f.fridge}</div>
       </div>
       <div class="lookup-item" style="background:rgba(123,104,174,0.1)">
-        <div class="li-label" style="color:#7B68AE">Freezer (≤0°F)</div>
+        <div class="li-label" style="color:#7B68AE">Freezer (≤${dispTemp(0)})</div>
         <div class="li-value" style="color:#7B68AE">${f.freezer}</div>
       </div>
       <div class="lookup-item" style="background:${reheatBg}">
         <div class="li-label" style="color:${reheatColor}">Reheat To</div>
-        <div class="li-value" style="color:${reheatColor}">${f.reheat}</div>
+        <div class="li-value" style="color:${reheatColor}">${convReheat(f.reheat)}</div>
       </div>
     </div>
-    <div class="lookup-reheat">💡 <strong>Tip:</strong> ${f.tip}</div>
+    <div class="lookup-reheat">💡 <strong>Tip:</strong> ${convTipTemps(f.tip)}</div>
     ${f.short.includes("Soups") || f.short.includes("Rice") ? `<div class="batch-tip">
       <button class="batch-toggle" id="batchToggle" onclick="toggleBatch()">
         🍲 Making a large batch? Important cooling info
@@ -1142,7 +1144,7 @@ function buildLookup(){
       </button>
       <div class="batch-body" id="batchBody">
         <strong>Normal home portions</strong> (1–4 servings) cool down in the fridge just fine — no special steps needed. But for <strong>large volumes</strong> (big pots of soup, full casserole dishes, bulk meal prep), the center of the food can stay in the danger zone for hours while the outside cools.<br><br>
-        <strong>The FDA two-stage rule:</strong> Food must go from 135°F → 70°F within 2 hours, then from 70°F → 41°F within 4 more hours (6 hours total). If it's not cooling fast enough:<br><br>
+        <strong>The FDA two-stage rule:</strong> Food must go from ${dispTemp(135)} → ${dispTemp(70)} within 2 hours, then from ${dispTemp(70)} → ${dispTemp(41)} within 4 more hours (6 hours total). If it's not cooling fast enough:<br><br>
         • <strong>Use an ice bath</strong> — place the pot in a sink of ice water and stir frequently<br>
         • <strong>Divide into shallow containers</strong> — no deeper than 4 inches<br>
         • <strong>Use ice paddles</strong> — fill a food-safe paddle with ice and stir directly<br>
@@ -1263,7 +1265,7 @@ function buildFoodProfiles(){
     const tempD=unit==="C"?Math.round(fToC(fp.temp))+"°C":fp.temp+"°F";
     b.style.display="flex";
     b.className="food-profile-banner";
-    b.innerHTML=`<span class="fpb-temp">${tempD}</span><span><strong>${fp.label.replace(/^.{2}\s*/,'')}</strong> — ${fp.logRed} reduction. ${fp.note}</span><button class="fpb-close" onclick="setProfile(null)" title="Clear profile">✕</button>`;
+    b.innerHTML=`<span class="fpb-temp">${tempD}</span><span><strong>${fp.label.replace(/^.{2}\s*/,'')}</strong> — ${fp.logRed} reduction. ${convTipTemps(fp.note)}</span><button class="fpb-close" onclick="setProfile(null)" title="Clear profile">✕</button>`;
   } else {
     b.style.display="none";
   }
