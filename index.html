@@ -37,6 +37,27 @@
   .pill button:hover:not(.active){color:var(--text2)}
   .theme-btn{background:var(--toggle-bg);border:1px solid var(--border);border-radius:8px;height:34px;width:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
   .theme-btn:hover{border-color:var(--border-hover)}
+  #textSizeBtn{font-weight:600;font-family:inherit;color:var(--text3)}
+  #textSizeBtn.active{background:var(--toggle-active-bg);border-color:var(--border-hover);color:var(--text)}
+
+  /* Large text mode */
+  .large-text .subtitle{font-size:17px}
+  .large-text .tabs button{font-size:15px}
+  .large-text .chart-label{font-size:18px}
+  .large-text .legend span{font-size:15px}
+  .large-text .zone{font-size:16px}
+  .large-text .zone strong{font-size:17px}
+  .large-text .footnote{font-size:16px}
+  .large-text .info-banner{font-size:18px}
+  .large-text .info-banner b{font-size:19px}
+  .large-text .disclaimer{font-size:16px}
+  .large-text .source-item,.large-text .source-note{font-size:16px}
+  .large-text #coolingContent{font-size:17px}
+  .large-text #pathogenContent{font-size:17px}
+  .large-text .food-btn{font-size:15px}
+  .large-text .storage-card{font-size:16px}
+  .large-text .storage-card h3{font-size:20px}
+  .large-text .mode-tag{font-size:13px}
 
   /* Tabs */
   .tabs{display:flex;gap:4px;margin-bottom:16px}
@@ -361,6 +382,7 @@
         <button onclick="setUnit('C')">°C</button>
       </div>
       <button class="export-btn" onclick="printReference()" title="Print a one-page food safety quick reference">🖨️ <span class="export-text">Print Reference</span></button>
+      <button class="theme-btn" id="textSizeBtn" onclick="toggleTextSize()" title="Switch to large text">Aa</button>
       <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
     </div>
   </div>
@@ -371,7 +393,7 @@
     <button onclick="setTab('freeze')"><span class="tab-icon">❄️</span>Freeze Inactivation</button>
     <button onclick="setTab('danger')"><span class="tab-icon">⏱️</span>Holding / Danger Zone</button>
     <button onclick="setTab('cooling')"><span class="tab-icon">🧊</span>Leftover Storage</button>
-    <button onclick="setTab('pathogen')"><span class="tab-icon">🦠</span>Pathogen Reference</button>
+    <button onclick="setTab('pathogen')"><span class="tab-icon">🍳</span>Safe Temps</button>
   </div>
 
   <div class="chart-container" id="chartContainer">
@@ -606,8 +628,21 @@ function drawHeat(){
   const isDet=heatMode==="detail";
   const xMin=isDet?148:135,xMax=isDet?200:180,xS=makeXS(xMin,xMax);
   let yS,yTA;
-  if(isDet){yS=makeYLog(Math.log10(1/60000),Math.log10(8));yTA=[{v:5,l:"5 min"},{v:2,l:"2 min"},{v:1,l:"1 min"},{v:0.5,l:"30 sec"},{v:10/60,l:"10 sec"},{v:1/60,l:"1 sec"},{v:0.1/60,l:"0.1 sec"},{v:0.01/60,l:"10 ms"},{v:0.001/60,l:"1 ms"}]}
-  else{yS=makeYLin(135);yTA=[0,20,40,60,80,100,120].map(v=>({v,l:v===60?"1 hr":v===120?"2 hr":v===0?"0":v+"m"}))}
+  // Dynamic y-axis: scale to the tallest active pathogen at the left edge
+  const activeHP=HEAT_PATHOGENS.filter(p=>heatActive.has(p.id));
+  const maxAtEdge=activeHP.length>0?Math.max(...activeHP.map(p=>heatCalc(p.refTime,p.z,xMin))):68;
+  if(isDet){
+    const logHi=activeHP.length>0?Math.min(Math.ceil(Math.log10(Math.max(maxAtEdge,1)))+0.5,Math.log10(120)):Math.log10(8);
+    yS=makeYLog(Math.log10(1/60000),logHi);
+    const allDet=[{v:60,l:"1 hr"},{v:30,l:"30 min"},{v:10,l:"10 min"},{v:5,l:"5 min"},{v:2,l:"2 min"},{v:1,l:"1 min"},{v:0.5,l:"30 sec"},{v:10/60,l:"10 sec"},{v:1/60,l:"1 sec"},{v:0.1/60,l:"0.1 sec"},{v:0.01/60,l:"10 ms"},{v:0.001/60,l:"1 ms"}];
+    yTA=allDet.filter(tk=>Math.log10(tk.v)<=logHi&&Math.log10(tk.v)>=Math.log10(1/60000))
+  } else {
+    const padded=maxAtEdge*1.15;
+    const step=[5,10,15,20,30,60].find(s=>Math.ceil(padded/s)<=7)||60;
+    const yMax=Math.max(Math.ceil(padded/step)*step,step);
+    yS=makeYLin(yMax);
+    yTA=[];for(let v=0;v<=yMax;v+=step){yTA.push({v,l:v===0?"0":v>=120?(v/60)+" hr":v===60?"1 hr":v+"m"})}
+  }
   const xTicks=isDet?[148,150,155,160,165,170,175,180,185,190,195,200]:[135,140,145,150,155,160,165,170,175,180];
   const temps=[];for(let t=xMin;t<=xMax;t+=(xMax-xMin)/300)temps.push(t);
 
@@ -664,7 +699,7 @@ function drawHeat(){
   el("rect",{x:M.l,y:M.t,width:PW,height:PH,fill:"none",stroke:T.grid,"stroke-width":1,rx:2},svg);
 
   const cl=document.getElementById("chartLabel");
-  cl.innerHTML=isDet?`<span>Detail View</span><span class="mode-tag detail">Log Scale · ${dispTemp(148)}–${dispTemp(180)}</span><span class="back-hint" onclick="heatMode='overview';draw()">← Back to full view</span>`:`<span>Exponential Decay</span><span class="mode-tag overview">Overview</span>`;
+  cl.innerHTML=isDet?`<span>Detail View</span><span class="mode-tag detail">Log Scale · ${dispTemp(148)}–${dispTemp(200)}</span><span class="back-hint" onclick="heatMode='overview';draw()">← Back to full view</span>`:`<span>Exponential Decay</span><span class="mode-tag overview">Overview</span>`;
 }
 
 function drawFreeze(){
@@ -1020,7 +1055,7 @@ function drawPathogen(){
   document.getElementById("coolingContent").style.display="none";
   document.getElementById("pathogenContent").style.display="block";
   buildFoodSafetyRef();
-  document.getElementById("chartLabel").innerHTML=`<span>Food Safety Reference</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
+  document.getElementById("chartLabel").innerHTML=`<span>Safe Temps</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
 }
 
 function buildFoodSafetyRef(){
@@ -1220,7 +1255,7 @@ function updateSubtitle(){
     tab==="heat"?`Time required to achieve safe inactivation at a given internal temperature. Click the <strong style="color:#2A9D8F">Instant Kill Zone</strong> to zoom in.`:
     tab==="freeze"?`Hold time required to destroy parasites at sub-freezing temperatures. Based on FDA and USDA freeze-destruction guidelines.`:
     tab==="danger"?`Select the temperature your food is being held at, then drag the slider or click the gauge to set how long it's been sitting out. The gauge shows whether your food is <strong style="color:#22C55E">SAFE</strong>, needs to be <strong style="color:#F59E0B">USED NOW</strong>, or should be <strong style="color:#EF4444">DISCARDED</strong> — based on FDA time-and-temperature guidelines.`:
-    tab==="pathogen"?`Select a food to see safe cooking temperatures, key handling rules, and what to watch out for. Tap the pathogen list for details.`:
+    tab==="pathogen"?`Select a food to see safe internal cooking temperatures, key handling rules, and what to watch out for.`:
     `Select a food type to see how long it lasts in the fridge, freezer, and how to reheat it safely. Based on USDA and FDA guidelines.`;
 }
 function updateFootnote(){
@@ -1228,7 +1263,7 @@ function updateFootnote(){
     tab==="heat"?"* S. aureus toxin, C. botulinum toxin, and bacterial spores require extreme conditions (e.g. pressure canning at 250°F/121°C). This chart applies to vegetative cells only.":
     tab==="freeze"?"* Some Trichinella strains in wild game (bear, wild boar) are freeze-resistant — USDA requires cooking to 170°F/77°C regardless. Freezing does NOT kill bacteria; it only makes them dormant.":
     tab==="danger"?"* Two official standards exist: the FDA Food Code defines the danger zone as 41°F–135°F (enforced in commercial kitchens), while the USDA uses a wider 40°F–140°F range for consumer education. This tool uses the USDA's more conservative range to provide a greater margin of safety for home use. Growth rates are generalized across common foodborne pathogens (Salmonella, E. coli, Listeria, S. aureus). Actual rates vary by pathogen, food type, moisture, pH, and other factors. The 2-hour rule applies to the total cumulative time in the danger zone, not per-session.":
-    tab==="pathogen"?"* Pathogen-food associations and likelihood ratings are based on CDC outbreak surveillance data, FDA recall patterns, and published food microbiology literature. \"Very Common\" = frequently implicated in outbreaks from this food. \"Common\" = regularly found or documented. \"Less Common\" / \"Rare\" = occasional or under specific conditions. Individual risk depends on preparation, sourcing, and handling.":
+    tab==="pathogen"?"* Safe internal temperatures and handling rules are based on FDA Food Code 2022, USDA FSIS consumer guidelines, and CDC outbreak surveillance data. Individual risk depends on preparation, sourcing, and handling.":
     "* Storage times are based on USDA and FDA guidelines for food kept at a constant 40°F or below. Quality may decline before safety does — \"use by\" dates refer to quality, not safety. Always refrigerate leftovers within 2 hours of cooking. When in doubt, throw it out.";
 }
 function updateInfoBanner(){
@@ -1434,6 +1469,14 @@ function toggleTheme(){
   document.getElementById("themeBtn").textContent=theme==="dark"?"🌙":"☀️";
   document.getElementById("themeBtn").title=theme==="dark"?"Switch to light mode":"Switch to dark mode";
   draw();
+}
+let largeText=false;
+function toggleTextSize(){
+  largeText=!largeText;
+  document.querySelector(".container").classList.toggle("large-text",largeText);
+  const btn=document.getElementById("textSizeBtn");
+  btn.classList.toggle("active",largeText);
+  btn.title=largeText?"Switch to normal text":"Switch to large text";
 }
 function toggleSources(){const t=document.getElementById("srcToggle"),b=document.getElementById("srcBody");t.classList.toggle("open");b.classList.toggle("open")}
 
