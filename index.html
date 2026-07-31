@@ -604,11 +604,11 @@ function drawHeat(){
   const svg=document.getElementById("chart");svg.innerHTML="";const T=getTheme();
   svg.setAttribute("viewBox","0 0 780 460");
   const isDet=heatMode==="detail";
-  const xMin=isDet?148:135,xMax=180,xS=makeXS(xMin,xMax);
+  const xMin=isDet?148:135,xMax=isDet?200:180,xS=makeXS(xMin,xMax);
   let yS,yTA;
   if(isDet){yS=makeYLog(Math.log10(1/60000),Math.log10(8));yTA=[{v:5,l:"5 min"},{v:2,l:"2 min"},{v:1,l:"1 min"},{v:0.5,l:"30 sec"},{v:10/60,l:"10 sec"},{v:1/60,l:"1 sec"},{v:0.1/60,l:"0.1 sec"},{v:0.01/60,l:"10 ms"},{v:0.001/60,l:"1 ms"}]}
   else{yS=makeYLin(135);yTA=[0,20,40,60,80,100,120].map(v=>({v,l:v===60?"1 hr":v===120?"2 hr":v===0?"0":v+"m"}))}
-  const xTicks=isDet?[148,150,152,154,156,158,160,162,164,166,168,170,172,174,176,178,180]:[135,140,145,150,155,160,165,170,175,180];
+  const xTicks=isDet?[148,150,155,160,165,170,175,180,185,190,195,200]:[135,140,145,150,155,160,165,170,175,180];
   const temps=[];for(let t=xMin;t<=xMax;t+=(xMax-xMin)/300)temps.push(t);
 
   // Sous-vide
