@@ -423,6 +423,9 @@
         <div class="source-item">Sánchez-Recillas, A. et al. (2022). <strong>"Thermal Inactivation of Salmonella enterica and Listeria monocytogenes in Quesillo Manufactured from Raw Milk."</strong> <em>Journal of Food Protection</em>.</div>
         <div class="source-item">FDA. <strong>Food Code 2022.</strong> Chapter 3-401: Cooking — minimum internal cooking temperatures for various food categories.</div>
         <div class="source-item">ICMSF. <strong>Microorganisms in Foods 5: Characteristics of Microbial Pathogens.</strong> Comprehensive reference for D-values and z-values across foodborne pathogens.</div>
+        <div class="source-item">Ortega, Y.R. et al. (2006). <strong>"Effects of Temperature and Different Food Matrices on Cyclospora cayetanensis Oocyst Sporulation."</strong> 50°C/1 hr reduced but did not eliminate sporulation; 70°C and 100°C prevented sporulation. −20°C for 2 days insufficient in some matrices.</div>
+        <div class="source-item">Sathyanarayanan, L. & Ortega, Y.R. (2006). <strong>"Microwave Inactivation of Cyclospora cayetanensis Sporulation."</strong> Internal temperatures ≥80°C required for reliable inactivation; cooking time alone unreliable due to uneven heating.</div>
+        <div class="source-item">Ortega, Y.R. & Sanchez, R. (2010). <strong>"Update on Cyclospora cayetanensis, a Food-Borne and Waterborne Parasite."</strong> <em>Clinical Microbiology Reviews</em>. Review confirming 70°C/15 min prevents sporulation; notes absence of a reliable infectivity model for Cyclospora.</div>
       </div>
       <div class="source-group">
         <h3>Freeze Inactivation — Primary Sources</h3>
@@ -456,7 +459,7 @@
         <div class="source-item">Adams, M.R. & Moss, M.O. <strong>Food Microbiology (4th Edition).</strong> Royal Society of Chemistry.</div>
       </div>
       <div class="source-note">
-        <strong>Methodology note:</strong> Curves modeled using first-order thermal death kinetics: log₁₀(t) = log₁₀(D<sub>ref</sub>) − (T − T<sub>ref</sub>) / z. Parameters approximated from sources above for 6.5–7 log reductions. Actual times vary by food matrix, moisture, fat, pH, and strain. For educational purposes — always follow USDA/FDA guidelines.
+        <strong>Methodology note:</strong> Curves modeled using first-order thermal death kinetics: log₁₀(t) = log₁₀(D<sub>ref</sub>) − (T − T<sub>ref</sub>) / z. Parameters approximated from sources above for 6.5–7 log reductions. <em>Cyclospora cayetanensis</em> parameters are derived from sporulation-prevention studies (Ortega et al. 2006; Sathyanarayanan &amp; Ortega 2006), anchored at the 70°C/15 min sporulation-prevention threshold (Sathyanarayanan &amp; Ortega 2006), with a conservative z-value reflecting oocyst thermal resistance. No classical D-value data exists for this parasite. Actual times vary by food matrix, moisture, fat, pH, and strain. For educational purposes — always follow USDA/FDA guidelines.
       </div>
     </div>
   </div>
@@ -474,7 +477,7 @@ const HEAT_PATHOGENS = [
   {id:"listeria",name:"Listeria monocytogenes",refTime:62,z:10.2,color:"#E63946"},
   {id:"salmonella",name:"Salmonella spp.",refTime:36,z:10.8,color:"#F4A261"},
   {id:"ecoli",name:"E. coli O157:H7",refTime:18,z:10.5,color:"#2A9D8F"},
-  {id:"cyclospora",name:"Cyclospora & Protozoan Parasites",refTime:48,z:15.5,color:"#5A7FC4"},
+  {id:"cyclospora",name:"Cyclospora cayetanensis (oocysts)",refTime:125,z:25,color:"#5A7FC4"},
   {id:"norovirus",name:"Norovirus (human)",refTime:32,z:14.0,color:"#7B68AE"},
   {id:"campylobacter",name:"Campylobacter jejuni",refTime:12,z:9.5,color:"#B07CC6"},
   {id:"hepatitisA",name:"Hepatitis A virus",refTime:10,z:12.5,color:"#45B7AA"},
@@ -604,7 +607,7 @@ function drawHeat(){
   const xMin=isDet?148:135,xMax=180,xS=makeXS(xMin,xMax);
   let yS,yTA;
   if(isDet){yS=makeYLog(Math.log10(1/60000),Math.log10(8));yTA=[{v:5,l:"5 min"},{v:2,l:"2 min"},{v:1,l:"1 min"},{v:0.5,l:"30 sec"},{v:10/60,l:"10 sec"},{v:1/60,l:"1 sec"},{v:0.1/60,l:"0.1 sec"},{v:0.01/60,l:"10 ms"},{v:0.001/60,l:"1 ms"}]}
-  else{yS=makeYLin(68);yTA=[0,10,20,30,40,50,60].map(v=>({v,l:v===60?"1 hr":v===0?"0":v+"m"}))}
+  else{yS=makeYLin(135);yTA=[0,20,40,60,80,100,120].map(v=>({v,l:v===60?"1 hr":v===120?"2 hr":v===0?"0":v+"m"}))}
   const xTicks=isDet?[148,150,152,154,156,158,160,162,164,166,168,170,172,174,176,178,180]:[135,140,145,150,155,160,165,170,175,180];
   const temps=[];for(let t=xMin;t<=xMax;t+=(xMax-xMin)/300)temps.push(t);
 
@@ -871,7 +874,7 @@ const PATHOGEN_NAMES = {
   listeria:{name:"Listeria monocytogenes",color:"#E63946"},
   salmonella:{name:"Salmonella spp.",color:"#F4A261"},
   ecoli:{name:"E. coli O157:H7",color:"#2A9D8F"},
-  cyclospora:{name:"Cyclospora cayetanensis",color:"#5A7FC4"},
+  cyclospora:{name:"Cyclospora cayetanensis (oocysts)",color:"#5A7FC4"},
   norovirus:{name:"Norovirus",color:"#7B68AE"},
   campylobacter:{name:"Campylobacter jejuni",color:"#B07CC6"},
   hepatitisA:{name:"Hepatitis A virus",color:"#45B7AA"},
