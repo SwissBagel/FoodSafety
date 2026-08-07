@@ -27,7 +27,7 @@
   .container{max-width:920px;margin:0 auto}
   .header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:6px}
   h1{font-size:26px;font-weight:800;letter-spacing:-0.03em;color:var(--text)}
-  .subtitle{font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:20px;max-width:720px}
+  .subtitle{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px;max-width:720px}
 
   /* Controls row */
   .controls{display:flex;gap:6px;flex-shrink:0;align-items:center}
@@ -94,7 +94,7 @@
   .legend button:not(.active){opacity:0.45}
   .legend button.toggle-all{font-weight:700;color:var(--text)}
 
-  .info-banner{background:#1E1318;border:1px solid #3D2028;border-radius:8px;padding:16px 20px;margin-bottom:12px;font-size:15px;color:#E8E8EC;line-height:1.7}
+  .info-banner{background:#1E1318;border:1px solid #3D2028;border-radius:8px;padding:24px;margin-bottom:12px;font-size:15px;color:#E8E8EC;line-height:1.7}
   .info-banner strong{color:#E63946;font-size:16px}
   .light .info-banner{background:#FDF2F2;color:#2D2D3A;border-color:#E8C4C4}
 
@@ -393,7 +393,7 @@
     <button onclick="setTab('freeze')"><span class="tab-icon">❄️</span>Freeze Inactivation</button>
     <button onclick="setTab('danger')"><span class="tab-icon">⏱️</span>Holding / Danger Zone</button>
     <button onclick="setTab('cooling')"><span class="tab-icon">🧊</span>Leftover Storage</button>
-    <button onclick="setTab('pathogen')"><span class="tab-icon">🍳</span>Safe Temps</button>
+    <button onclick="setTab('pathogen')"><span class="tab-icon">🍳</span>Safe Cooking Temps</button>
   </div>
 
   <div class="chart-container" id="chartContainer">
@@ -551,7 +551,6 @@ const FOOD_PROFILES = [
   {id:"wholecut",label:"🥩 Whole Cuts",temp:145,logRed:"6.5-log",note:"Steaks, roasts, chops — beef, pork, lamb, veal. 3-minute rest required.",pathogens:["salmonella","ecoli","clostridium"]},
   {id:"fish",label:"🐟 Fish",temp:145,logRed:"6-log",note:"Until opaque and flakes easily. Sushi-grade must be pre-frozen for parasites.",pathogens:["vibrio","listeria","hepatitisA"]},
   {id:"eggs",label:"🥚 Eggs",temp:160,logRed:"7-log",note:"Until yolk and white are firm. Pasteurized eggs are safe for raw preparations.",pathogens:["salmonella"]},
-  {id:"reheat",label:"♻️ Reheating",temp:165,logRed:"7-log",note:"All leftovers and reheated foods must reach 165°F within 2 hours.",pathogens:["listeria","salmonella","clostridium","ecoli"]},
 ];
 let activeProfile = null;
 
@@ -896,6 +895,7 @@ const FOODS = [
   {cat:"Cold & Raw",short:"🥗 Meat Salad",name:"🥗 Salads (with meat/eggs)",fridge:"1–2 days",freezer:"Don't freeze",reheat:"N/A",tip:"Chicken salad, tuna salad, and egg salad are high-risk. The mayo isn't the problem — it's the protein. Use within 1–2 days."},
   {cat:"Cold & Raw",short:"🍣 Sushi",name:"🍣 Sushi & Raw Fish",fridge:"24 hours max",freezer:"Don't freeze (prepared)",reheat:"N/A",tip:"Sushi is a same-day food. After 24 hours in the fridge, discard regardless of appearance or smell."},
   {cat:"Cold & Raw",short:"🫐 Berries",name:"🫐 Fresh Berries",fridge:"3–7 days",freezer:"8–12 months",reheat:"N/A",tip:"Don't wash until ready to eat — moisture accelerates mold. Strawberries last 3–5 days, blueberries up to 7. Toss any berries with visible mold — spores spread to neighbors."},
+  {cat:"Dairy & Baked Goods",short:"🧀 Queso & Dips",name:"🧀 Queso Blanco & Nacho Cheese Dips",fridge:"3–4 days",freezer:"2–3 months",reheat:"165°F throughout",tip:"Cheese dips cool fast in a bowl and enter the danger zone quickly. Refrigerate within 2 hours of serving. Reheat to 165°F — don't just warm it up. Slow cooker or stovetop works best for even reheating."},
   {cat:"Dairy & Baked Goods",short:"🧀 Soft Cheese",name:"🧀 Soft Cheese (brie, ricotta)",fridge:"1–2 weeks",freezer:"Don't freeze",reheat:"N/A",tip:"Soft cheeses support Listeria growth even when refrigerated. Discard if mold appears — don't just cut it off."},
   {cat:"Dairy & Baked Goods",short:"🧀 Hard Cheese",name:"🧀 Hard Cheese (cheddar, parmesan)",fridge:"3–4 weeks",freezer:"6–8 months",reheat:"N/A",tip:"Hard cheeses are low-moisture and resist bacteria. If mold appears, cut 1 inch around and below — the rest is safe."},
   {cat:"Dairy & Baked Goods",short:"🍪 Cookies",name:"🍪 Cookies & Baked Goods",fridge:"1–2 weeks",freezer:"3–6 months",reheat:"N/A — optional warm-up",tip:"Most baked goods are low-moisture and shelf-stable for days at room temp. Refrigerate items with cream, custard, or cream cheese frosting."},
@@ -1011,35 +1011,27 @@ const FOOD_SAFETY_REF = [
     pathogens:["salmonella","ecoli","listeria"],
     crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"}]
   },
-  {cat:"Dairy",short:"🥛 Raw Milk",name:"🥛 Unpasteurized Milk & Juice",desc:"Pasteurization exists for a reason — it's one of the most effective food safety interventions ever developed.",
-    safeTemp:"Pasteurize",safeTempC:"Pasteurize",tempNote:"Buy pasteurized. Unpasteurized products carry significant risk",
+  {cat:"Dairy",short:"🧀 Queso & Cheese Dips",name:"🧀 Queso Blanco, Nacho Cheese & Cheese Dips",desc:"Cheese dips are a party staple — and a common danger zone problem. They cool fast in a bowl and sit out for hours.",
+    safeTemp:"140°F",safeTempC:"60°C",tempNote:"Hold above 140°F (60°C) to keep bacteria from growing. Reheat to 165°F if it's been sitting out",
     rules:[
-      {icon:"⚠️",text:"<strong>Raw milk is one of the riskiest foods.</strong> It can carry Campylobacter, Salmonella, E. coli, and Listeria simultaneously."},
-      {icon:"🚫",text:"<strong>\"Raw\" does not mean \"natural and safe.\"</strong> Pasteurization doesn't reduce nutrition — it eliminates dangerous pathogens."},
-      {icon:"🧃",text:"<strong>Same applies to fresh-pressed juice</strong> — unpasteurized cider and juice have caused serious outbreaks, especially in children."},
+      {icon:"🔥",text:"<strong>Keep it hot — above 140°F.</strong> Use a slow cooker, chafing dish, or warming tray. A bowl on the table drops below 140°F fast."},
+      {icon:"⏱️",text:"<strong>2-hour rule applies.</strong> If your queso has been sitting out below 140°F for more than 2 hours, reheat to 165°F or discard."},
+      {icon:"🔄",text:"<strong>Don't just stir and re-serve.</strong> If it's been in the danger zone, it needs to hit 165°F throughout — not just get warm on the edges."},
+      {icon:"🧊",text:"<strong>Refrigerate leftovers</strong> within 2 hours. Use within 3–4 days. Reheat to 165°F before serving again."},
     ],
-    pathogens:["campylobacter","salmonella","ecoli","listeria"],
-    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"}]
+    pathogens:["salmonella","listeria","clostridium"],
+    crosslinks:[{tab:"danger",label:"⏱️ Danger zone timing"},{tab:"heat",label:"🔥 Kill curves at temp"}]
   },
-  {cat:"Dairy",short:"🧀 Soft Cheese",name:"🧀 Soft Cheese (Brie, Queso Fresco)",desc:"Listeria grows at fridge temperatures, making soft cheese uniquely dangerous — especially for pregnant women.",
-    safeTemp:"N/A",safeTempC:"N/A",tempNote:"Buy pasteurized. Check labels on imported and artisan cheeses",
+  {cat:"Deli & Ready-to-Eat",short:"🥪 Deli Meats",name:"🥪 Deli Meats & Hot Dogs",desc:"Ready-to-eat — safe cold or heated. The main risk is Listeria, which can grow even at fridge temperatures.",
+    safeTemp:"Keep Cold",safeTempC:"Keep Cold",tempNote:"Keep refrigerated at 40°F (4°C) or below. Safe to eat cold or cooked",
     rules:[
-      {icon:"🏷️",text:"<strong>Check the label</strong> — it must say \"made with pasteurized milk.\" Imported soft cheeses may not be."},
-      {icon:"🤰",text:"<strong>Pregnant women should avoid</strong> soft cheeses like brie, camembert, queso fresco, and blue cheese unless confirmed pasteurized."},
-      {icon:"🧊",text:"<strong>Listeria grows in the fridge.</strong> Unlike most bacteria, cold doesn't stop it — just slows it. Use soft cheese by the sell-by date."},
-    ],
-    pathogens:["listeria","salmonella"],
-    crosslinks:[{tab:"cooling",label:"🧊 Storage: 1–2 weeks (soft)"}]
-  },
-  {cat:"Deli & Ready-to-Eat",short:"🥪 Deli Meats",name:"🥪 Deli Meats & Hot Dogs",desc:"Ready-to-eat with no further cooking step. Listeria contamination can happen after processing at the deli.",
-    safeTemp:"165°F",safeTempC:"74°C",tempNote:"Reheat deli meats until steaming hot to kill Listeria",
-    rules:[
-      {icon:"🌡️",text:"<strong>Reheat to steaming (165°F)</strong> before eating — this is the only way to kill Listeria that may have grown during storage."},
+      {icon:"🌭",text:"<strong>Hot dogs and bologna:</strong> heat until steaming hot (165°F). These are pre-cooked but can harbor Listeria from the package."},
       {icon:"📅",text:"<strong>Use within 3–5 days</strong> of opening, regardless of the sell-by date. Pre-sliced deli meat is higher risk than whole pieces."},
-      {icon:"🤰",text:"<strong>Pregnant women</strong> should always heat deli meats before eating — Listeria can cause miscarriage and stillbirth."},
+      {icon:"🧊",text:"<strong>Keep refrigerated at all times.</strong> Don't leave deli meats out for more than 2 hours (1 hour above 90°F)."},
+      {icon:"🤰",text:"<strong>Pregnant and immunocompromised:</strong> heat all deli meats to steaming (165°F) before eating — Listeria can cause miscarriage and stillbirth."},
     ],
     pathogens:["listeria","salmonella","clostridium"],
-    crosslinks:[{tab:"heat",label:"🔥 Kill curves at temp"},{tab:"cooling",label:"🧊 Storage: 3–5 days fridge"}]
+    crosslinks:[{tab:"danger",label:"⏱️ Danger zone timing"},{tab:"cooling",label:"🧊 Storage: 3–5 days fridge"}]
   },
 ];
 
@@ -1055,7 +1047,7 @@ function drawPathogen(){
   document.getElementById("coolingContent").style.display="none";
   document.getElementById("pathogenContent").style.display="block";
   buildFoodSafetyRef();
-  document.getElementById("chartLabel").innerHTML=`<span>Safe Temps</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
+  document.getElementById("chartLabel").innerHTML=`<span>Safe Cooking Temps</span><span class="mode-tag" style="background:rgba(230,57,70,0.15);color:#E63946">By Food</span>`;
 }
 
 function buildFoodSafetyRef(){
@@ -1276,10 +1268,10 @@ function updateInfoBanner(){
     b.innerHTML=`<div class="info-banner"><strong>⚠ The 2-Hour / 4-Hour Rule:</strong> Food in the danger zone (${dispTemp(40)}–${dispTemp(140)}) for <strong>under 2 hours</strong> → refrigerate or use immediately. <strong>2–4 hours</strong> → use immediately, do not refrigerate. <strong>Over 4 hours</strong> → discard. Time is cumulative across all exposures.</div>`;
     d.style.display="block";
   } else if(tab==="cooling"){
-    b.innerHTML=`<div class="info-banner"><strong>⚠ The #1 Rule:</strong> Refrigerate leftovers <strong>within 2 hours</strong> of cooking. Use shallow containers for large amounts. Eat or freeze within the storage window shown below.</div>`;
+    b.innerHTML=`<div class="info-banner"><strong>⚠ The #1 Rule:</strong> Refrigerate leftovers <strong>within 2 hours</strong> of cooking. Use shallow containers for large amounts. Eat or freeze within the storage window shown below. <strong>Reheating proteins, rice, or cooked dishes? Always reheat to 165°F (74°C).</strong></div>`;
     d.style.display="none";
   } else if(tab==="pathogen"){
-    b.innerHTML=`<div class="info-banner"><strong>ℹ️ Quick Reference:</strong> Each card shows the <strong>safe internal temperature</strong>, practical handling rules, and links to related tabs. The pathogen list at the bottom is there if you're curious — not to scare you.</div>`;
+    b.innerHTML=`<div class="info-banner"><strong>ℹ️ Quick Reference:</strong> These are minimum <strong>cooking temperatures for raw food</strong> — they vary by type. <strong>Reheating proteins, rice, or cooked dishes? Always reheat to 165°F (74°C)</strong> The pathogen list at the bottom of each card is there if you're curious.</div>`;
     d.style.display="none";
   } else {
     b.innerHTML="";
